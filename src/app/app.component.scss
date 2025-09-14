@@ -1,0 +1,26 @@
+.main-toolbar {
+  display: flex;
+  justify-content: space-between; // Aligne les éléments
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 8px; // Espace entre l'icône et le texte
+  text-decoration: none;
+  color: white;
+}
+
+.spacer {
+  flex: 1 1 auto; // Prend tout l'espace disponible
+}
+
+.content {
+  padding: 20px;
+}
+
+.toolbar-actions {
+  display: flex;
+  align-items: center; // Aligne les boutons verticalement au centre
+  gap: 8px; // Ajoute un petit espace entre les boutons
+}

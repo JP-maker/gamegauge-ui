@@ -1,1 +1,35 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+mat-card {
+  width: 100%;
+  max-width: 400px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+button[mat-raised-button] {
+  margin-top: 16px;
+  min-height: 48px;
+}
+
+.error-message {
+  color: #f44336; // Couleur d'erreur de Material
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+mat-card-actions {
+  margin-top: 16px;
+  display: flex;
+  justify-content: center;
+}

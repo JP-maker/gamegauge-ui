@@ -1,0 +1,47 @@
+<div class="form-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Inscription</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        
+        <mat-form-field appearance="outline">
+          <mat-label>Nom d'utilisateur</mat-label>
+          <input matInput formControlName="username">
+          <mat-error *ngIf="registerForm.get('username')?.hasError('required')">Requis.</mat-error>
+          <mat-error *ngIf="registerForm.get('username')?.hasError('minlength')">3 caractères minimum.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email">
+          <mat-error *ngIf="registerForm.get('email')?.hasError('required')">Requis.</mat-error>
+          <mat-error *ngIf="registerForm.get('email')?.hasError('email')">Invalide.</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput formControlName="password" type="password">
+          <mat-error *ngIf="registerForm.get('password')?.hasError('required')">Requis.</mat-error>
+          <mat-error *ngIf="registerForm.get('password')?.hasError('minlength')">8 caractères minimum.</mat-error>
+        </mat-form-field>
+
+        <div *ngIf="errorMessage" class="error-message">
+          {{ errorMessage }}
+        </div>
+
+        <button mat-raised-button color="primary" type="submit" [disabled]="registerForm.invalid || isLoading">
+          <span *ngIf="!isLoading">S'inscrire</span>
+          <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" [diameter]="24"></mat-progress-spinner>
+        </button>
+
+      </form>
+    </mat-card-content>
+
+    <mat-card-actions>
+      <p>Déjà un compte ? <a routerLink="/login">Connectez-vous</a></p>
+    </mat-card-actions>
+  </mat-card>
+</div>
