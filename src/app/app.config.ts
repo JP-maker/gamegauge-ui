@@ -16,6 +16,6 @@ export const appConfig: ApplicationConfig = {
     // 2. Modifier provideHttpClient pour inclure notre intercepteur
     provideHttpClient(withInterceptors([
       authInterceptor
-    ]))
+    ])), provideAnimationsAsync()
   ]
 };

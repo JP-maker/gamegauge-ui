@@ -1,11 +1,43 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$violet-palette,
+  ),
+  density: (
+    scale: -1
+  )
+));
+
+html {
+  height: 100%;
+}
+
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 mat-card {
   width: 100%;
   max-width: 400px;
+}
+
+mat-card-title {
+  color: antiquewhite;
+  font-size: 24px;
+  font-weight: 500;
+  padding-bottom: 8px;
+}
+
+mat-card-actions {
+  color: antiquewhite;
+}
+
+mat-card-actions a {
+  color: #90caf9; // Couleur primaire claire de Material
 }
 
 form {
