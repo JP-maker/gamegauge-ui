@@ -1,0 +1,43 @@
+<div class="container">
+  <h1>Mes Tableaux de Scores</h1>
+
+  <!-- On utilise le pipe async pour souscrire à l'observable boards$ -->
+  <ng-container *ngIf="boards$ | async as boards; else loading">
+    
+    <!-- Si la liste est vide -->
+    <div *ngIf="boards.length === 0" class="empty-state">
+      <mat-icon>scoreboard</mat-icon>
+      <p>Vous n'avez aucun tableau de scores pour le moment.</p>
+      <button mat-raised-button color="primary">Créer un premier tableau</button>
+    </div>
+
+    <!-- Si la liste contient des tableaux -->
+    <div *ngIf="boards.length > 0" class="board-grid">
+      <mat-card *ngFor="let board of boards" class="board-card">
+        <mat-card-header>
+          <mat-card-title>{{ board.name }}</mat-card-title>
+          <mat-card-subtitle>
+            {{ board.participants.length }} participant(s)
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-actions>
+          <!-- Ce lien mènera plus tard vers la page de détail du tableau -->
+          <a mat-button color="primary" [routerLink]="['/boards', board.id]">VOIR</a>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+
+  </ng-container>
+
+  <!-- Template affiché pendant le chargement -->
+  <ng-template #loading>
+    <div class="loading-spinner">
+      <mat-spinner></mat-spinner>
+    </div>
+  </ng-template>
+
+  <!-- Bouton flottant pour créer un nouveau tableau -->
+  <button mat-fab color="accent" class="fab-add-button" aria-label="Créer un nouveau tableau">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>
