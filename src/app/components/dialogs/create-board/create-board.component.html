@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Créer un nouveau tableau de scores</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="createBoardForm" id="createBoardForm" (ngSubmit)="onSave()">
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Nom de la partie</mat-label>
+      <input matInput formControlName="name" cdkFocusInitial>
+      <mat-error *ngIf="createBoardForm.get('name')?.hasError('required')">Requis.</mat-error>
+      <mat-error *ngIf="createBoardForm.get('name')?.hasError('minlength')">3 caractères minimum.</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Score Cible (optionnel)</mat-label>
+      <input matInput formControlName="targetScore" type="number">
+    </mat-form-field>
+    
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre de tours (optionnel)</mat-label>
+      <input matInput formControlName="numberOfRounds" type="number">
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button mat-flat-button color="primary" type="submit" form="createBoardForm" [disabled]="createBoardForm.invalid">
+    Créer
+  </button>
+</mat-dialog-actions>

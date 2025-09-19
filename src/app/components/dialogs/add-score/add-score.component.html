@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Ajouter un score pour {{ data.participantName }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="addScoreForm" id="addScoreForm" (ngSubmit)="onSave()">
+    <mat-form-field appearance="outline">
+      <mat-label>Score</mat-label>
+      <input matInput formControlName="scoreValue" type="number">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Tour n°</mat-label>
+      <input matInput formControlName="roundNumber" type="number" min="1">
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Annuler</button>
+  <button mat-flat-button color="primary" type="submit" form="addScoreForm" [disabled]="addScoreForm.invalid">
+    Enregistrer
+  </button>
+</mat-dialog-actions>

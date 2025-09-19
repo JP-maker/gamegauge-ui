@@ -1,0 +1,31 @@
+<h2 mat-dialog-title>Gérer les Participants</h2>
+
+<mat-dialog-content>
+  <!-- Formulaire d'ajout -->
+  <form [formGroup]="addParticipantForm" (ngSubmit)="onAddParticipant()" class="add-form">
+    <mat-form-field appearance="outline">
+      <mat-label>Nom du nouveau participant</mat-label>
+      <input matInput formControlName="name">
+    </mat-form-field>
+    <button mat-icon-button color="primary" type="submit" [disabled]="addParticipantForm.invalid || isLoading">
+      <mat-icon *ngIf="!isLoading">add</mat-icon>
+      <mat-progress-spinner *ngIf="isLoading" mode="indeterminate" [diameter]="20"></mat-progress-spinner>
+    </button>
+  </form>
+
+  <!-- Liste des participants existants -->
+  <mat-list role="list">
+    <mat-list-item *ngFor="let p of participants" role="listitem">
+      <span matListItemTitle>{{ p.name }}</span>
+      <span matListItemLine>Score: {{ p.totalScore }}</span>
+      <button mat-icon-button color="warn" (click)="onRemoveParticipant(p.id)" aria-label="Supprimer le participant">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </mat-list-item>
+  </mat-list>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="closeDialog()">Fermer</button>
+</mat-dialog-actions>

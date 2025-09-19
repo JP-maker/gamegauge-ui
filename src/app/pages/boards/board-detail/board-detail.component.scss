@@ -43,3 +43,29 @@ h1 {
   align-items: center;
   padding: 50px;
 }
+
+.spacer { flex: 1 1 auto; }
+
+h2 {
+  margin-top: 32px;
+}
+
+.table-container {
+  width: 100%;
+  overflow: auto; // Ajoute une barre de défilement si le tableau est trop large
+}
+
+table {
+  width: 100%;
+}
+
+th.mat-header-cell, td.mat-cell {
+  text-align: center;
+  padding: 8px;
+}
+
+// Style particulier pour la première colonne (Tour)
+th.mat-column-roundNumber, td.mat-column-roundNumber {
+  font-weight: bold;
+  text-align: left;
+}

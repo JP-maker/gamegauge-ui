@@ -8,7 +8,7 @@
     <div *ngIf="boards.length === 0" class="empty-state">
       <mat-icon>scoreboard</mat-icon>
       <p>Vous n'avez aucun tableau de scores pour le moment.</p>
-      <button mat-raised-button color="primary">Créer un premier tableau</button>
+      <button mat-raised-button color="primary" (click)="openCreateBoardDialog()">Créer un premier tableau</button>>
     </div>
 
     <!-- Si la liste contient des tableaux -->
@@ -37,7 +37,7 @@
   </ng-template>
 
   <!-- Bouton flottant pour créer un nouveau tableau -->
-  <button mat-fab color="accent" class="fab-add-button" aria-label="Créer un nouveau tableau">
+  <button mat-fab color="accent" class="fab-add-button" aria-label="Créer un nouveau tableau" (click)="openCreateBoardDialog()">
     <mat-icon>add</mat-icon>
   </button>
 </div>
