@@ -66,4 +66,12 @@ export class BoardService {
     // Le type Partial<Board> signifie que l'objet peut n'avoir que certaines propriétés de Board.
     return this.http.post<Board>(this.apiUrl, boardData);
   }
+
+  /**
+   * Supprime un tableau de scores par son ID.
+   * @param boardId L'ID du tableau à supprimer.
+   */
+  deleteBoard(boardId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${boardId}`);
+  }
 }

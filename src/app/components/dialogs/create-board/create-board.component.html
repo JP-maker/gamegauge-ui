@@ -10,6 +10,14 @@
       <mat-error *ngIf="createBoardForm.get('name')?.hasError('minlength')">3 caractères minimum.</mat-error>
     </mat-form-field>
 
+    <div class="score-condition-group" *ngIf="createBoardForm.get('targetScore')?.value">
+      <label class="mat-body-1">Condition pour le score cible :</label>
+      <mat-radio-group formControlName="scoreCondition" color="primary">
+        <mat-radio-button value="HIGHEST_WINS">Le plus haut score gagne</mat-radio-button>
+        <mat-radio-button value="LOWEST_WINS">Le plus bas score gagne</mat-radio-button>
+      </mat-radio-group>
+    </div>
+
     <mat-form-field appearance="outline">
       <mat-label>Score Cible (optionnel)</mat-label>
       <input matInput formControlName="targetScore" type="number">

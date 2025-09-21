@@ -39,3 +39,28 @@
   bottom: 24px;
   right: 24px;
 }
+
+mat-card-header {
+  // Utiliser flexbox pour permettre au spacer de fonctionner
+  display: flex;
+  width: 100%;
+
+}
+
+.spacer {
+  flex: 1 1 auto; // Prend tout l'espace disponible
+}
+
+.drag-handle {
+  position: absolute;
+  top: 10px;
+  left: 6px;
+  cursor: move; // Changer le curseur pour indiquer qu'on peut déplacer
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.card-content {
+  // S'assure que le contenu peut être cliqué pour la navigation
+  width: 100%;
+  height: 100%;
+}

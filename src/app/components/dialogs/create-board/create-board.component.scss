@@ -3,3 +3,14 @@ form {
   flex-direction: column;
   gap: 8px;
 }
+
+.score-condition-group {
+  margin-top: 16px;
+  margin-bottom: 8px;
+
+  mat-radio-group {
+    display: flex;
+    gap: 20px;
+    margin-top: 8px;
+  }
+}

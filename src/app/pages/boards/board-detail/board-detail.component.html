@@ -8,6 +8,15 @@
     <button mat-fab (click)="openManageParticipantsDialog(board)" aria-label="Gérer les participants">
       <mat-icon>group</mat-icon>
     </button>
+    <button mat-fab [matMenuTriggerFor]="menu" aria-label="Menu d'actions du tableau">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item (click)="onDeleteBoard(board.id, board.name)">
+        <mat-icon>delete</mat-icon>
+        <span>Supprimer</span>
+      </button>
+    </mat-menu>
   </div>
 
   <!-- Informations sur les règles -->
@@ -15,16 +24,21 @@
     <mat-card *ngIf="board.targetScore">
       <mat-card-content>
         <div class="info-item">
-          <mat-icon>emoji_events</mat-icon>
-          <span>Score Cible : {{ board.targetScore }}</span>
+          <mat-icon color="primary">emoji_events</mat-icon>
+          <div>
+            <mat-card-title>Score Cible : {{ board.targetScore }}</mat-card-title>
+            <!-- AFFICHER LA CONDITION -->
+            <div class="subtext" *ngIf="board.scoreCondition === 'HIGHEST_WINS'">Le plus haut score gagne</div>
+            <div class="subtext" *ngIf="board.scoreCondition === 'LOWEST_WINS'">Le plus bas score gagne</div>
+          </div>
         </div>
       </mat-card-content>
     </mat-card>
     <mat-card *ngIf="board.numberOfRounds">
       <mat-card-content>
         <div class="info-item">
-          <mat-icon>replay</mat-icon>
-          <span>Nombre de tours : {{ board.numberOfRounds }}</span>
+          <mat-icon color="primary">replay</mat-icon>
+          <mat-card-title>Nombre de tours : {{ board.numberOfRounds }}</mat-card-title>
         </div>
       </mat-card-content>
     </mat-card>

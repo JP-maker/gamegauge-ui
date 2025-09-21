@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
 
 @Component({
   selector: 'app-create-board',
@@ -19,7 +20,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatRadioModule
   ],
   templateUrl: './create-board.component.html',
   styleUrl: './create-board.component.scss'
@@ -31,6 +33,7 @@ export class CreateBoardComponent {
   createBoardForm: FormGroup = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
     targetScore: [null],
+    scoreCondition: ['HIGHEST_WINS', Validators.required], 
     numberOfRounds: [null]
   });
 

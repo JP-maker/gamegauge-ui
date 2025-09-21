@@ -69,3 +69,16 @@ th.mat-column-roundNumber, td.mat-column-roundNumber {
   font-weight: bold;
   text-align: left;
 }
+
+.info-text {
+  color: rgba(255, 12, 85, 0.87); // Couleur de texte principale
+}
+
+.subtext {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.info-item > div {
+    display: flex;
+    flex-direction: column;
+}

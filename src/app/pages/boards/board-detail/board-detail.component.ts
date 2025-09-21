@@ -7,6 +7,7 @@ import { BoardService } from '../../../services/board.service';
 import { ManageParticipantsComponent } from '../../../components/dialogs/manage-participants/manage-participants.component';
 import { tap } from 'rxjs';
 import { RoundData } from '../../../models/round.model';
+import { Router } from '@angular/router';
 
 // Imports Material
 import { MatCardModule } from '@angular/material/card';
@@ -16,6 +17,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { AddScoreComponent } from '../../../components/dialogs/add-score/add-score.component';
 import { MatTableModule } from '@angular/material/table';
+import { MatMenuModule } from '@angular/material/menu'; 
+import { ConfirmComponent } from '../../../components/dialogs/confirm/confirm.component';
 
 @Component({
   selector: 'app-board-detail',
@@ -28,7 +31,8 @@ import { MatTableModule } from '@angular/material/table';
     MatIconModule,
     MatButtonModule,
     MatDialogModule,
-    MatTableModule
+    MatTableModule,
+    MatMenuModule,
   ],
   templateUrl: './board-detail.component.html',
   styleUrl: './board-detail.component.scss'
@@ -38,6 +42,7 @@ export class BoardDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private boardService = inject(BoardService);
   private dialog = inject(MatDialog); // <-- INJECTER MatDialog
+   private router = inject(Router);
 
   board$!: Observable<Board>;
   // Ajout pour pouvoir recharger les données
@@ -149,5 +154,23 @@ export class BoardDetailComponent implements OnInit {
     });
   }
 
+  onDeleteBoard(boardId: number, boardName: string): void {
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      data: {
+        title: 'Supprimer le tableau',
+        message: `Êtes-vous sûr de vouloir supprimer définitivement le tableau "${boardName}" et tous ses scores ?`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.boardService.deleteBoard(boardId).subscribe(() => {
+          console.log('Tableau supprimé avec succès');
+          // Rediriger l'utilisateur vers la liste des tableaux
+          this.router.navigate(['/boards']);
+        });
+      }
+    });
+  }
   
 }

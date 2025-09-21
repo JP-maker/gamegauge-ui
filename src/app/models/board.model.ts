@@ -6,10 +6,13 @@ export interface Participant {
   scores: any[]; // On pourra typer ScoreEntry plus tard
 }
 
+export type ScoreCondition = 'HIGHEST_WINS' | 'LOWEST_WINS';
+
 export interface Board {
   id: number;
   name: string;
   targetScore: number;
+  scoreCondition: ScoreCondition | null;
   numberOfRounds: number;
   createdAt: string; // Les dates sont souvent transmises comme des chaînes de caractères
   updatedAt: string;
