@@ -1,0 +1,155 @@
+$section-hero-bg: #121212; // Fond principal
+$section-board-bg: #212121; // Un gris un peu plus clair
+$section-cta-bg: #303030;   // Un autre gris
+
+// Style de base pour un conteneur de section
+.section-container {
+  padding: 64px 24px; // Espacement vertical et horizontal
+  width: 100%;
+  box-sizing: border-box; // S'assurer que le padding est inclus dans la largeur
+}
+
+// Style pour le contenu à l'intérieur d'une section (pour le centrer)
+.section-content {
+  max-width: 1000px; // Largeur maximale du contenu
+  margin: 0 auto;    // Centrer horizontalement
+  text-align: center;
+}
+
+// Appliquer les couleurs de fond
+.hero-section {
+  background-color: $section-hero-bg;
+}
+
+.board-section {
+  background-color: $section-board-bg;
+}
+
+.cta-section {
+  background-color: $section-cta-bg;
+}
+
+// Rendre le contenu du header et du CTA plus lisible
+.hero-section h1, .cta-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 16px;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 24px;
+}
+
+// S'assurer que le header du tableau n'est plus centré par .section-content
+.board-section .header {
+  text-align: left;
+}
+
+.start-board-cta {
+  padding: 48px 0;
+
+  h2 {
+    font-size: 2rem;
+    margin-bottom: 24px;
+  }
+
+  button {
+    // Agrandir le bouton pour qu'il soit plus visible
+    transform: scale(1.2); 
+  }
+}
+
+.landing-header, .save-cta {
+  text-align: center;
+  max-width: 800px;
+  margin: 40px auto;
+}
+.subtitle {
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.7);
+}
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+h1 {
+  margin: 0;
+}
+
+.rules-info {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  flex-wrap: wrap; // Pour les petits écrans
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.participant-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.rank-avatar {
+  background-color: #673ab7; // Thème primary
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px;
+}
+
+.spacer { flex: 1 1 auto; }
+
+h2 {
+  margin-top: 32px;
+}
+
+.table-container {
+  width: 100%;
+  overflow: auto; // Ajoute une barre de défilement si le tableau est trop large
+}
+
+table {
+  width: 100%;
+}
+
+th.mat-header-cell, td.mat-cell {
+  text-align: center;
+  padding: 8px;
+}
+
+// Style particulier pour la première colonne (Tour)
+th.mat-column-roundNumber, td.mat-column-roundNumber {
+  font-weight: bold;
+  text-align: left;
+}
+
+.info-text {
+  color: rgba(255, 12, 85, 0.87); // Couleur de texte principale
+}
+
+.subtext {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+}
+.info-item > div {
+    display: flex;
+    flex-direction: column;
+}

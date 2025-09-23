@@ -19,6 +19,8 @@ import { AddScoreComponent } from '../../../components/dialogs/add-score/add-sco
 import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu'; 
 import { ConfirmComponent } from '../../../components/dialogs/confirm/confirm.component';
+import { NotificationService } from '../../../services/notification.service';
+import { TotalScorePipe } from '../../../pipes/total-score.pipe'; 
 
 @Component({
   selector: 'app-board-detail',
@@ -33,6 +35,7 @@ import { ConfirmComponent } from '../../../components/dialogs/confirm/confirm.co
     MatDialogModule,
     MatTableModule,
     MatMenuModule,
+    TotalScorePipe
   ],
   templateUrl: './board-detail.component.html',
   styleUrl: './board-detail.component.scss'
@@ -42,7 +45,8 @@ export class BoardDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private boardService = inject(BoardService);
   private dialog = inject(MatDialog); // <-- INJECTER MatDialog
-   private router = inject(Router);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
 
   board$!: Observable<Board>;
   // Ajout pour pouvoir recharger les données
@@ -134,22 +138,25 @@ export class BoardDetailComponent implements OnInit {
     });
   }
   
-   openAddScoreDialog(boardId: number, participant: Participant): void {
+  openAddScoreDialog(boardId: number, participant: Participant): void {
     const nextRoundNumber = (participant.scores?.length || 0) + 1;
 
     const dialogRef = this.dialog.open(AddScoreComponent, {
       width: '350px',
       data: { 
-        boardId: boardId, 
-        participantId: participant.id, 
         participantName: participant.name,
         nextRoundNumber: nextRoundNumber 
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      // `result` contient maintenant { scoreValue: ..., roundNumber: ... }
       if (result) {
-        this.refreshBoard$.next(); // On rafraîchit la liste
+        // On appelle le service API avec les données retournées
+        this.boardService.setScore(boardId, participant.id, result).subscribe(() => {
+          this.notificationService.showSuccess(`Score enregistré pour ${participant.name}.`);
+          this.refreshBoard$.next();
+        });
       }
     });
   }

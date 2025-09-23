@@ -11,9 +11,9 @@ export type ScoreCondition = 'HIGHEST_WINS' | 'LOWEST_WINS';
 export interface Board {
   id: number;
   name: string;
-  targetScore: number;
+  targetScore: number | null;
   scoreCondition: ScoreCondition | null;
-  numberOfRounds: number;
+  numberOfRounds: number | null;
   displayOrder: number | null;
   createdAt: string; // Les dates sont souvent transmises comme des chaînes de caractères
   updatedAt: string;

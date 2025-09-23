@@ -2,7 +2,6 @@ import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { BoardService } from '../../../services/board.service';
 import { NotificationService } from '../../../services/notification.service'; 
 
 // Imports Material
@@ -32,7 +31,6 @@ export class AddScoreComponent {
   // Le constructeur est maintenant responsable de TOUTE l'initialisation
   constructor(
     private fb: FormBuilder,
-    private boardService: BoardService,
     public dialogRef: MatDialogRef<AddScoreComponent>,
     // @Inject est la manière correcte de recevoir les données dans un dialogue
     @Inject(MAT_DIALOG_DATA) public data: { 
@@ -52,14 +50,11 @@ export class AddScoreComponent {
   }
 
   onSave(): void {
-    if (this.addScoreForm.invalid) return;
-
-    // Appeler la nouvelle méthode du service
-    this.boardService.setScore(this.data.boardId, this.data.participantId, this.addScoreForm.value as any)
-      .subscribe(() => {
-        this.notificationService.showSuccess(`Score enregistré pour ${this.data.participantName}.`);
-        this.dialogRef.close(true);
-    });
+    if (this.addScoreForm.valid) {
+      // On ferme le dialogue en retournant les valeurs du formulaire
+      this.notificationService.showSuccess(`Score enregistré pour ${this.data.participantName}.`);
+      this.dialogRef.close(this.addScoreForm.value);
+    }
 }
 
   onCancel(): void {

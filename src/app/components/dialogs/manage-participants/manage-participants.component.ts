@@ -37,7 +37,7 @@ export class ManageParticipantsComponent {
   private boardService = inject(BoardService);
   public dialogRef = inject(MatDialogRef<ManageParticipantsComponent>);
   private notificationService = inject(NotificationService);
-
+  
   // Formulaire pour ajouter un nouveau participant
   addParticipantForm = this.fb.group({
     name: ['', Validators.required]
@@ -46,9 +46,11 @@ export class ManageParticipantsComponent {
   // On reçoit les données (l'ID du tableau et la liste des participants) via l'injection
   participants: Participant[] = [];
   isLoading = false;
+  isLocalMode: boolean; 
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: { boardId: number, participants: Participant[] }) {
     this.participants = [...this.data.participants]; // Copie pour éviter la mutation directe
+    this.isLocalMode = this.data.boardId === 0;
   }
 
   onAddParticipant(): void {
@@ -57,27 +59,45 @@ export class ManageParticipantsComponent {
     this.isLoading = true;
     const newName = this.addParticipantForm.value.name!;
     
-    this.boardService.addParticipant(this.data.boardId, newName).subscribe(newParticipant => {
+    if (this.isLocalMode) {
+      // --- LOGIQUE LOCALE ---
+      const newParticipant: Participant = {
+        id: Date.now(), // ID temporaire unique
+        name: newName,
+        totalScore: 0,
+        scores: []
+      };
       this.participants.push(newParticipant);
       this.addParticipantForm.reset();
       this.isLoading = false;
-      this.notificationService.showSuccess(`"${newName}" a été ajouté.`);
-    });
+    } else {
+      this.boardService.addParticipant(this.data.boardId, newName).subscribe(newParticipant => {
+        this.participants.push(newParticipant);
+        this.addParticipantForm.reset();
+        this.isLoading = false;
+        this.notificationService.showSuccess(`"${newName}" a été ajouté.`);
+      });
+    }
   }
 
   onRemoveParticipant(participantId: number): void {
-    const participantName = this.participants.find(p => p.id === participantId)?.name;
-    this.boardService.removeParticipant(this.data.boardId, participantId).subscribe(() => {
-      // Mettre à jour la liste en filtrant le participant supprimé
+    if (this.isLocalMode) {
+      // --- LOGIQUE LOCALE ---
       this.participants = this.participants.filter(p => p.id !== participantId);
-      if (participantName) {
-        this.notificationService.showSuccess(`"${participantName}" a été supprimé.`);
-      }
-    });
+    } else {
+      const participantName = this.participants.find(p => p.id === participantId)?.name;
+      this.boardService.removeParticipant(this.data.boardId, participantId).subscribe(() => {
+        // Mettre à jour la liste en filtrant le participant supprimé
+        this.participants = this.participants.filter(p => p.id !== participantId);
+        if (participantName) {
+          this.notificationService.showSuccess(`"${participantName}" a été supprimé.`);
+        }
+      });
+    }
   }
 
   closeDialog(): void {
-    // On passe 'true' pour indiquer à la page appelante qu'il y a eu des changements
-    this.dialogRef.close(true);
+    const result = this.isLocalMode ? this.participants : true; // Simplification : on peut toujours retourner true si besoin de rafraîchir
+    this.dialogRef.close(result);
   }
 }

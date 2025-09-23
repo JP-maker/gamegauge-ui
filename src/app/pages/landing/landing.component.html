@@ -1,0 +1,131 @@
+<!-- Fichier : src/app/pages/landing/landing.component.html -->
+
+<!-- SECTION 1 : HÉROS (Introduction) -->
+<div class="section-container hero-section">
+  <div class="section-content">
+    <h1>Bienvenue sur GameGauge</h1>
+    <p class="subtitle">Le moyen le plus simple de suivre les scores de vos jeux de société, sans prise de tête.</p>
+    <p>Commencez immédiatement ci-dessous ou <a routerLink="/register">créez un compte</a> pour sauvegarder vos parties et accéder à votre historique.</p>
+  </div>
+</div>
+
+<!-- SECTION 2 : TABLEAU DE SCORE RAPIDE (Partie Interactive) -->
+<div class="section-container board-section">
+  <div class="section-content">
+
+    <!-- 
+      Logique d'affichage principale :
+      Si la variable `guestBoard` existe (n'est pas null), on affiche le template #boardView.
+      Sinon (else), on affiche le template #startView.
+    -->
+    <ng-container *ngIf="guestBoard; else startView">
+      <ng-container *ngTemplateOutlet="boardView"></ng-container>
+    </ng-container>
+
+    <!-- TEMPLATE 1 : Vue "Démarrer une partie" (affiché si `guestBoard` est null) -->
+    <ng-template #startView>
+      <div class="start-board-cta">
+        <h2>Prêt à jouer ?</h2>
+        <button mat-raised-button color="primary" (click)="startQuickPlay()">
+          <mat-icon>play_circle_filled</mat-icon>
+          Démarrer une Partie Rapide
+        </button>
+      </div>
+    </ng-template>
+
+    <!-- TEMPLATE 2 : Vue du tableau de scores (affiché si `guestBoard` existe) -->
+    <ng-template #boardView>
+      <!-- En-tête du tableau -->
+      <div class="header">
+        <!-- L'opérateur '?' (safe navigation) est une sécurité au cas où guestBoard serait null -->
+        <h1>{{ guestBoard?.name }}</h1>
+        <span class="spacer"></span>
+        <button mat-stroked-button (click)="openManageParticipantsDialog()">
+          <mat-icon>groups</mat-icon>
+          Gérer les participants
+        </button>
+        <button mat-stroked-button color="warn" (click)="resetGuestBoard()">
+          <mat-icon>delete_sweep</mat-icon>
+          Effacer la partie
+        </button>
+      </div>
+
+      <!-- Informations sur les règles -->
+      <div class="rules-info">
+        <mat-card *ngIf="guestBoard?.targetScore">
+          <mat-card-content>
+            <div class="info-item">
+              <mat-icon>emoji_events</mat-icon>
+              <div>
+                <span>Score Cible : {{ guestBoard?.targetScore }}</span>
+                <div class="subtext" *ngIf="guestBoard?.scoreCondition === 'HIGHEST_WINS'">Le plus haut score gagne</div>
+                <div class="subtext" *ngIf="guestBoard?.scoreCondition === 'LOWEST_WINS'">Le plus bas score gagne</div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+        <mat-card *ngIf="guestBoard?.numberOfRounds">
+          <mat-card-content>
+            <div class="info-item">
+              <mat-icon>replay</mat-icon>
+              <span>Nombre de tours : {{ guestBoard?.numberOfRounds }}</span>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Classement des participants -->
+      <h2>Classement</h2>
+      <div class="participant-list">
+        <!-- On vérifie que `guestBoard` et `guestBoard.participants` existent avant de boucler -->
+        <mat-card *ngFor="let participant of guestBoard?.participants; let i = index" class="participant-card">
+          <mat-card-header>
+            <div mat-card-avatar class="rank-avatar">{{ i + 1 }}</div>
+            <mat-card-title>{{ participant.name }}</mat-card-title>
+            <mat-card-subtitle>Score Total : {{ participant.scores | totalScore }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-actions>
+            <button mat-button color="primary" (click)="openAddScoreDialog(participant)">AJOUTER SCORE</button>
+          </mat-card-actions>
+        </mat-card>
+        <p *ngIf="!guestBoard?.participants?.length" class="empty-list-info">
+          Ajoutez des participants pour commencer !
+        </p>
+      </div>
+
+      <!-- Tableau récapitulatif des tours -->
+      <h2 *ngIf="roundsData.length > 0">Historique des Tours</h2>
+      <div *ngIf="roundsData.length > 0" class="table-container">
+        <table mat-table [dataSource]="roundsData" class="mat-elevation-z8">
+          <!-- Colonne "Tour" -->
+          <ng-container matColumnDef="roundNumber">
+            <th mat-header-cell *matHeaderCellDef> Tour </th>
+            <td mat-cell *matCellDef="let round"> {{round.roundNumber}} </td>
+          </ng-container>
+
+          <!-- Colonnes des Participants (dynamiques) -->
+          <ng-container *ngFor="let participantId of participantIds" [matColumnDef]="participantId.toString()">
+            <th mat-header-cell *matHeaderCellDef> {{ participantMap.get(participantId) }} </th>
+            <td mat-cell *matCellDef="let round"> 
+              {{ round.scores[participantId] !== null ? round.scores[participantId] : '-' }} 
+            </td>
+          </ng-container>
+
+          <!-- Définition des lignes -->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </ng-template>
+
+  </div>
+</div>
+
+<!-- SECTION 3 : APPEL À L'ACTION (CTA pour l'inscription) -->
+<div class="section-container cta-section">
+  <div class="section-content">
+    <h2>Prêt à sauvegarder votre partie ?</h2>
+    <p>Créez un compte gratuit pour enregistrer cette partie et bien d'autres !</p>
+    <a mat-raised-button color="accent" routerLink="/register">Créer mon compte et sauvegarder</a>
+  </div>
+</div>
