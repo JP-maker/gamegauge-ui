@@ -27,7 +27,8 @@
 .board-card {
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
-
+  width: 100%;
+  box-sizing: border-box;
   &:hover {
     transform: translateY(-4px);
     box-shadow: 0 4px 20px rgba(0,0,0,0.25);
@@ -55,12 +56,41 @@ mat-card-header {
   position: absolute;
   top: 10px;
   left: 6px;
-  cursor: move; // Changer le curseur pour indiquer qu'on peut déplacer
-  color: rgba(255, 255, 255, 0.3);
+  cursor: move;
+  color: rgba(255, 255, 255, 0.4);
+  z-index: 10;
 }
 
 .card-content {
   // S'assure que le contenu peut être cliqué pour la navigation
   width: 100%;
   height: 100%;
+  padding-left: 24px;
+}
+
+.card-content mat-card-header mat-card-title {
+  // 1. Empêcher le retour à la ligne
+  white-space: nowrap;
+  
+  // 2. Cacher tout ce qui dépasse
+  overflow: hidden;
+  
+  // 3. Ajouter "..." à la fin du texte coupé
+  text-overflow: ellipsis;
+
+  // 4. (Optionnel mais recommandé) S'assurer qu'il a une largeur maximale
+  // pour savoir quand commencer à couper. 
+  // Le `mat-card-header` gère déjà bien cela, mais c'est une sécurité.
+  max-width: 180px; // Ajustez cette valeur si nécessaire
+}
+
+mat-card-subtitle {
+  // Aligner les spans horizontalement
+  display: flex;
+  align-items: center;
+}
+
+.separator {
+  // Ajouter un espacement horizontal de chaque côté du point
+  margin: 0 8px;
 }

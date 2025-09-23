@@ -26,6 +26,7 @@ import { MatRadioModule } from '@angular/material/radio';
   templateUrl: './create-board.component.html',
   styleUrl: './create-board.component.scss'
 })
+
 export class CreateBoardComponent {
   private fb = inject(FormBuilder);
   public dialogRef = inject(MatDialogRef<CreateBoardComponent>);

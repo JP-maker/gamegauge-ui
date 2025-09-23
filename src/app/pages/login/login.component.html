@@ -20,11 +20,6 @@
           <mat-error *ngIf="loginForm.get('password')?.hasError('required')">Le mot de passe est requis.</mat-error>
         </mat-form-field>
 
-        <!-- Affichage du message d'erreur global -->
-        <div *ngIf="errorMessage" class="error-message">
-          {{ errorMessage }}
-        </div>
-
         <!-- Bouton de soumission avec indicateur de chargement -->
         <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid || isLoading">
           <span *ngIf="!isLoading">Se connecter</span>

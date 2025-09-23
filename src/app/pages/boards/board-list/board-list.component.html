@@ -12,7 +12,7 @@
     </div>
 
     <!-- Si la liste contient des tableaux -->
-    <div *ngIf="boards.length > 0" class="board-grid">
+    <div *ngIf="boards.length > 0" >
       <div class="board-grid"
          cdkDropList
          [cdkDropListData]="boards"
@@ -26,6 +26,9 @@
               <mat-card-title>{{ board.name }}</mat-card-title>
               <mat-card-subtitle>
                 {{ board.participants.length }} participant(s)
+                <span class="separator">&middot;</span>
+                <!-- On utilise le DatePipe pour formater la date -->
+                <span>{{ board.createdAt | date: 'dd/MM/yyyy' }}</span>
               </mat-card-subtitle>
             </mat-card-header>
           </div>

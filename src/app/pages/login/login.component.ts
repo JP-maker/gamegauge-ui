@@ -10,8 +10,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'; // Pour l'indicateur de chargement
 
+
 // Notre service
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-login',
@@ -29,11 +31,13 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
+
 export class LoginComponent {
   // Injection de dépendances
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private notificationService = inject(NotificationService);
 
   // Définition du formulaire
   loginForm: FormGroup = this.fb.group({
@@ -52,21 +56,20 @@ export class LoginComponent {
     }
 
     this.isLoading = true;
-    this.errorMessage = null;
     
     const credentials = this.loginForm.value;
 
     this.authService.login(credentials).subscribe({
       next: (response) => {
         this.isLoading = false;
-        console.log('Connexion réussie', response);
+        this.notificationService.showSuccess('Connexion réussie ! Bienvenue.');
         // Rediriger vers la page des tableaux de bord (que nous créerons plus tard)
         this.router.navigate(['/boards']);
       },
       error: (err) => {
         this.isLoading = false;
         // Afficher un message d'erreur clair à l'utilisateur
-        this.errorMessage = 'L\'email ou le mot de passe est incorrect.';
+        this.notificationService.showError('L\'email ou le mot de passe est incorrect.');
         console.error('Erreur de connexion', err);
       }
     });

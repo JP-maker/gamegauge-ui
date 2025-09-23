@@ -14,6 +14,7 @@ export interface Board {
   targetScore: number;
   scoreCondition: ScoreCondition | null;
   numberOfRounds: number;
+  displayOrder: number | null;
   createdAt: string; // Les dates sont souvent transmises comme des chaînes de caractères
   updatedAt: string;
   ownerUsername: string;

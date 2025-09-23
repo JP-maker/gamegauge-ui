@@ -74,4 +74,12 @@ export class BoardService {
   deleteBoard(boardId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${boardId}`);
   }
+
+  /**
+   * Met à jour l'ordre des tableaux.
+   * @param boardIds Une liste d'ID de tableaux dans le nouvel ordre.
+   */
+  updateOrder(boardIds: number[]): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/order`, { boardIds });
+  }
 }

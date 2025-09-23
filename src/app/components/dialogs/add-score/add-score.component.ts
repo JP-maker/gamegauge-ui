@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { BoardService } from '../../../services/board.service';
+import { NotificationService } from '../../../services/notification.service'; 
 
 // Imports Material
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,7 +40,8 @@ export class AddScoreComponent {
       participantId: number, 
       participantName: string, 
       nextRoundNumber: number 
-    }
+    },
+    private notificationService: NotificationService
   ) {
     // Initialiser le formulaire ICI, à l'intérieur du constructeur,
     // où 'this.data' est garanti d'être disponible.
@@ -55,6 +57,7 @@ export class AddScoreComponent {
     // Appeler la nouvelle méthode du service
     this.boardService.setScore(this.data.boardId, this.data.participantId, this.addScoreForm.value as any)
       .subscribe(() => {
+        this.notificationService.showSuccess(`Score enregistré pour ${this.data.participantName}.`);
         this.dialogRef.close(true);
     });
 }

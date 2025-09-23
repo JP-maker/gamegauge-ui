@@ -13,6 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 import { Participant } from '../../../models/board.model';
 import { BoardService } from '../../../services/board.service';
+import { NotificationService } from '../../../services/notification.service';
 
 @Component({
   selector: 'app-manage-participants',
@@ -35,6 +36,7 @@ export class ManageParticipantsComponent {
   private fb = inject(FormBuilder);
   private boardService = inject(BoardService);
   public dialogRef = inject(MatDialogRef<ManageParticipantsComponent>);
+  private notificationService = inject(NotificationService);
 
   // Formulaire pour ajouter un nouveau participant
   addParticipantForm = this.fb.group({
@@ -59,13 +61,18 @@ export class ManageParticipantsComponent {
       this.participants.push(newParticipant);
       this.addParticipantForm.reset();
       this.isLoading = false;
+      this.notificationService.showSuccess(`"${newName}" a été ajouté.`);
     });
   }
 
   onRemoveParticipant(participantId: number): void {
+    const participantName = this.participants.find(p => p.id === participantId)?.name;
     this.boardService.removeParticipant(this.data.boardId, participantId).subscribe(() => {
       // Mettre à jour la liste en filtrant le participant supprimé
       this.participants = this.participants.filter(p => p.id !== participantId);
+      if (participantName) {
+        this.notificationService.showSuccess(`"${participantName}" a été supprimé.`);
+      }
     });
   }
 

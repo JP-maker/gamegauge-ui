@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 // Notre service
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -29,10 +30,12 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
+
 export class RegisterComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private notificationService = inject(NotificationService);
 
   registerForm: FormGroup = this.fb.group({
     // Validation selon les règles de notre API backend
@@ -42,22 +45,20 @@ export class RegisterComponent {
   });
 
   isLoading = false;
-  errorMessage: string | null = null;
-
+ 
   onSubmit(): void {
     if (this.registerForm.invalid) {
       return;
     }
 
     this.isLoading = true;
-    this.errorMessage = null;
     
     const userData = this.registerForm.value;
 
     this.authService.register(userData).subscribe({
       next: () => {
         this.isLoading = false;
-        console.log('Inscription réussie');
+        this.notificationService.showSuccess('Inscription réussie ! Vous pouvez maintenant vous connecter.');
         // Rediriger vers la page de connexion après une inscription réussie
         this.router.navigate(['/login']); 
       },
@@ -65,9 +66,9 @@ export class RegisterComponent {
         this.isLoading = false;
         // Gérer les erreurs de l'API (ex: email déjà utilisé)
         if (err.status === 409) { // 409 Conflict
-          this.errorMessage = err.error; // Afficher le message d'erreur de l'API
+          this.notificationService.showError(err.error); // Afficher le message d'erreur de l'API
         } else {
-          this.errorMessage = 'Une erreur est survenue. Veuillez réessayer.';
+          this.notificationService.showError('Une erreur est survenue. Veuillez réessayer.');
         }
         console.error('Erreur d\'inscription', err);
       }

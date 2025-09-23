@@ -65,3 +65,21 @@ mat-card-actions {
   display: flex;
   justify-content: center;
 }
+
+/* STYLES GLOBAUX POUR LES NOTIFICATIONS SNACKBAR */
+
+// Style pour les notifications de succès
+.snackbar-success {
+  // Appliquer les couleurs de la palette "accent" de notre thème
+  --mdc-snackbar-container-color: #69f0ae; // Vert Material
+  --mat-mdc-snack-bar-button-color: #000;
+  --mdc-snackbar-supporting-text-color: #000;
+}
+
+// Style pour les notifications d'erreur
+.snackbar-error {
+  // Appliquer les couleurs de la palette "warn" (rouge) de notre thème
+  --mdc-snackbar-container-color: #f44336; // Rouge Material (warn)
+  --mat-mdc-snack-bar-button-color: #fff;
+  --mdc-snackbar-supporting-text-color: #fff;
+}
