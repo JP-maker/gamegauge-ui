@@ -82,4 +82,27 @@ export class BoardService {
   updateOrder(boardIds: number[]): Observable<void> {
     return this.http.put<void>(`${this.apiUrl}/order`, { boardIds });
   }
+
+  /**
+   * Importe un tableau de scores à partir d'un objet JSON.
+   * Utile pour la fonctionnalité d'import/export.
+   * @param boardData Les données du tableau à importer.
+   */
+  importBoard(boardData: Board): Observable<Board> {
+  // On s'assure de n'envoyer que les champs nécessaires
+  const payload = {
+    name: boardData.name,
+    targetScore: boardData.targetScore,
+    scoreCondition: boardData.scoreCondition,
+    numberOfRounds: boardData.numberOfRounds,
+    participants: boardData.participants.map(p => ({
+      name: p.name,
+      scores: p.scores.map(s => ({
+        scoreValue: s.scoreValue,
+        roundNumber: s.roundNumber
+      }))
+    }))
+  };
+  return this.http.post<Board>(`${this.apiUrl}/import`, payload);
+}
 }
