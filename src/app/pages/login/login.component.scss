@@ -1,6 +1,32 @@
+@use 'styles/variables' as vars;
+
 .form-container {
   display: flex;
   justify-content: center;
   padding-top: 40px;
+  background-color: vars.$surface-color;
+  border-radius: vars.$border-radius;
+  box-shadow: vars.$box-shadow;
 }
 
+.error-message {
+  color: vars.$warn-color; // <-- UTILISATION
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+// On peut aussi styliser la carte pour qu'elle utilise notre couleur de surface
+mat-card {
+  background-color: vars.$surface-color; // <-- UTILISATION
+}
+
+mat-card-actions p {
+  color: vars.$text-secondary-color; // <-- UTILISATION
+
+  a {
+    color: vars.$accent-color; // <-- UTILISATION
+    &:hover {
+      color: vars.$text-primary-color;
+    }
+  }
+}

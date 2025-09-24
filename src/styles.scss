@@ -1,8 +1,10 @@
 /* You can add global styles to this file, and also import other style files */
-
+@use 'styles/variables' as vars;
 @use '@angular/material' as mat;
 
 @include mat.core();
+
+$gamegauge-primary: #bb86fc; // Violet clair (style Material Dark)
 
 $theme: mat.define-theme((
   color: (
@@ -18,7 +20,20 @@ html {
   height: 100%;
 }
 
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+  background-color: vars.$background-color; 
+  color: vars.$text-primary-color;
+}
+
+a {
+  color: vars.$accent-color; // <-- UTILISATION
+  text-decoration: none;
+  &:hover {
+    text-decoration: underline;
+  }
+}
 
 mat-card {
   width: 100%;
@@ -38,6 +53,10 @@ mat-card-actions {
 
 mat-card-actions a {
   color: #90caf9; // Couleur primaire claire de Material
+}
+
+mat-dialog-content {
+  padding-top: 10px !important;
 }
 
 form {

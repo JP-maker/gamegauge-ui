@@ -1,6 +1,4 @@
-$section-hero-bg: #121212; // Fond principal
-$section-board-bg: #212121; // Un gris un peu plus clair
-$section-cta-bg: #303030;   // Un autre gris
+@use 'styles/variables' as vars;
 
 // Style de base pour un conteneur de section
 .section-container {
@@ -18,15 +16,15 @@ $section-cta-bg: #303030;   // Un autre gris
 
 // Appliquer les couleurs de fond
 .hero-section {
-  background-color: $section-hero-bg;
+  background-color: vars.$section-hero-bg;
 }
 
 .board-section {
-  background-color: $section-board-bg;
+  background-color: vars.$section-board-bg;
 }
 
 .cta-section {
-  background-color: $section-cta-bg;
+  background-color: vars.$section-cta-bg;
 }
 
 // Rendre le contenu du header et du CTA plus lisible
@@ -37,7 +35,7 @@ $section-cta-bg: #303030;   // Un autre gris
 
 .subtitle {
   font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: vars.$text-secondary-color;
   margin-bottom: 24px;
 }
 
@@ -67,7 +65,7 @@ $section-cta-bg: #303030;   // Un autre gris
 }
 .subtitle {
   font-size: 1.2rem;
-  color: rgba(255,255,255,0.7);
+  color: vars.$text-secondary-color;
 }
 .header {
   display: flex;
@@ -100,8 +98,8 @@ h1 {
 }
 
 .rank-avatar {
-  background-color: #673ab7; // Thème primary
-  color: white;
+  background-color: vars.$primary-color;
+  color: vars.$avatar-color;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -142,12 +140,12 @@ th.mat-column-roundNumber, td.mat-column-roundNumber {
 }
 
 .info-text {
-  color: rgba(255, 12, 85, 0.87); // Couleur de texte principale
+  color: vars.$warn-color; // Couleur de texte principale
 }
 
 .subtext {
   font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  color: vars.$text-secondary-color;
 }
 .info-item > div {
     display: flex;

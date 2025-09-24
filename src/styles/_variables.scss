@@ -1,0 +1,27 @@
+// --- COULEURS DE BASE ---
+// Couleurs neutres pour le fond et les surfaces (cartes, dialogues, etc.)
+$background-color: #121212;
+$surface-color: #212121;
+$surface-highlight-color: #303030;
+
+// Couleurs pour les textes
+$text-primary-color: #ffffff;      // Texte principal
+$text-secondary-color: rgba(255, 255, 255, 0.7); // Texte secondaire, sous-titres
+$text-disabled-color: rgba(255, 255, 255, 0.5);  // Texte désactivé
+
+// --- COULEURS DE LA MARQUE (THÈME) ---
+// On peut les lier aux palettes Material si on veut, ou les définir manuellement.
+$primary-color: #bb86fc; // Violet clair (style Material Dark)
+$accent-color: #03dac6;  // Cyan (style Material Dark)
+$warn-color: #cf6679;    // Rouge clair (style Material Dark)
+
+// --- AUTRES VARIABLES ---
+$border-radius: 4px; // Rayon des bordures
+$box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); // Ombre portée standard
+
+// --- COULEURS DES SECTIONS SPÉCIFIQUES ---
+$section-hero-bg: #121212; // Fond principal
+$section-board-bg: #212121; // Un gris un peu plus clair
+$section-cta-bg: #303030;   // Un autre gris
+
+$avatar-color: white; // Couleur du texte dans les avatars
