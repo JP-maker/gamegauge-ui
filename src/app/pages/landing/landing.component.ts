@@ -113,10 +113,12 @@ export class LandingComponent implements OnInit {
       data: { boardId: this.guestBoard.id, participants: this.guestBoard.participants }
     });
     
-    dialogRef.afterClosed().subscribe(() => {
-      // Pour un dialogue de gestion complexe, il faudrait qu'il retourne la nouvelle liste.
-      // Pour simplifier, on recharge tout.
-      this.loadGuestBoard();
+    dialogRef.afterClosed().subscribe((updatedParticipants: Participant[] | undefined) => {
+      // On ne met à jour que si le dialogue a retourné une liste.
+      if (updatedParticipants) {
+        this.guestBoard!.participants = updatedParticipants;
+        this.saveState(); // Sauvegarde et met à jour la vue
+      }
     });
   }
 

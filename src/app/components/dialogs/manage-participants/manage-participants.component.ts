@@ -45,6 +45,7 @@ export class ManageParticipantsComponent {
 
   // On reçoit les données (l'ID du tableau et la liste des participants) via l'injection
   participants: Participant[] = [];
+  private hasChanges = false;
   isLoading = false;
   isLocalMode: boolean; 
 
@@ -68,11 +69,13 @@ export class ManageParticipantsComponent {
         scores: []
       };
       this.participants.push(newParticipant);
+      this.hasChanges = true;
       this.addParticipantForm.reset();
       this.isLoading = false;
     } else {
       this.boardService.addParticipant(this.data.boardId, newName).subscribe(newParticipant => {
         this.participants.push(newParticipant);
+        this.hasChanges = true;
         this.addParticipantForm.reset();
         this.isLoading = false;
         this.notificationService.showSuccess(`"${newName}" a été ajouté.`);
@@ -84,11 +87,13 @@ export class ManageParticipantsComponent {
     if (this.isLocalMode) {
       // --- LOGIQUE LOCALE ---
       this.participants = this.participants.filter(p => p.id !== participantId);
+      this.hasChanges = true;
     } else {
       const participantName = this.participants.find(p => p.id === participantId)?.name;
       this.boardService.removeParticipant(this.data.boardId, participantId).subscribe(() => {
         // Mettre à jour la liste en filtrant le participant supprimé
         this.participants = this.participants.filter(p => p.id !== participantId);
+        this.hasChanges = true;
         if (participantName) {
           this.notificationService.showSuccess(`"${participantName}" a été supprimé.`);
         }
@@ -98,6 +103,10 @@ export class ManageParticipantsComponent {
 
   closeDialog(): void {
     const result = this.isLocalMode ? this.participants : true; // Simplification : on peut toujours retourner true si besoin de rafraîchir
-    this.dialogRef.close(result);
+    if (this.hasChanges) {
+      this.dialogRef.close(this.participants);
+    } else {
+      this.dialogRef.close();
+    }
   }
 }
