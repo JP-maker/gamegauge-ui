@@ -3,6 +3,7 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { AsyncPipe, CommonModule } from '@angular/common';
 import { Observable } from 'rxjs'; // <-- NOUVEL IMPORT
 import { map, shareReplay, startWith } from 'rxjs/operators'; // <-- NOUVEL IMPORT: startWith, shareReplay
+import { AuthService } from './services/auth.service';
 
 // Imports pour Angular CDK Layout
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'; // <-- NOUVEAUX IMPORTS
@@ -30,6 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class AppComponent {
   // Injecter le BreakpointObserver
   private breakpointObserver = inject(BreakpointObserver);
+  public authService = inject(AuthService);
 
   // Créer un Observable qui émet `true` si l'écran correspond à la taille d'un smartphone
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
@@ -40,4 +42,8 @@ export class AppComponent {
       // Met en cache la dernière valeur pour les nouveaux souscripteurs, évite les exécutions multiples
       shareReplay(1) 
     );
+    
+  onLogout(): void {
+    this.authService.logout();
+  }
 }
