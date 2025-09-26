@@ -10,12 +10,11 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { ManageParticipantsComponent } from '../../components/dialogs/manage-participants/manage-participants.component';
 import { AddScoreComponent } from '../../components/dialogs/add-score/add-score.component';
 import { MatTableModule } from '@angular/material/table';
-import { RoundData } from '../../models/round.model';
 import { RouterLink } from '@angular/router';
 import { ScoreEntryResponse } from '../../models/score-entry.model';
 import { ConfirmComponent } from '../../components/dialogs/confirm/confirm.component';
 import { CreateBoardComponent } from '../../components/dialogs/create-board/create-board.component';
-import { TotalScorePipe } from '../../pipes/total-score.pipe';
+import { ScoreboardComponent } from '../../components/scoreboard/scoreboard.component';
 
 @Component({
   selector: 'app-landing',
@@ -28,7 +27,7 @@ import { TotalScorePipe } from '../../pipes/total-score.pipe';
     MatIconModule, 
     MatDialogModule, 
     MatTableModule, 
-    TotalScorePipe
+    ScoreboardComponent
   ],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss'
@@ -37,10 +36,6 @@ export class LandingComponent implements OnInit {
   private localStorageService = inject(LocalStorageService);
   private dialog = inject(MatDialog);
 
-  roundsData: RoundData[] = [];
-  displayedColumns: string[] = [];
-  participantMap = new Map<number, string>();
-  participantIds: number[] = [];
   guestBoard: Board | null = null;
   isNewBoard = false;
 
@@ -57,10 +52,6 @@ export class LandingComponent implements OnInit {
       // Si on doit en créer un, on ne l'assigne pas tout de suite
       this.guestBoard = null;
       this.isNewBoard = true;
-    }
-    // On ne traite les données que s'il y a un tableau
-    if (this.guestBoard) {
-      this.processBoardData();
     }
   }
 
@@ -176,39 +167,6 @@ export class LandingComponent implements OnInit {
   private saveState(): void {
     if (!this.guestBoard) return;
     this.localStorageService.saveGuestBoard(this.guestBoard);
-    this.processBoardData();
+    this.guestBoard = { ...this.guestBoard };
   }
-  
-  private processBoardData(): void {
-    if (!this.guestBoard || !this.guestBoard.participants) { return; }
-    this.participantMap.clear();
-    this.participantIds = [];
-    this.guestBoard.participants.forEach(p => {
-        this.participantMap.set(p.id, p.name);
-        this.participantIds.push(p.id);
-    });
-    this.displayedColumns = ['roundNumber', ...this.guestBoard.participants.map(p => p.id.toString())];
-    const roundsMap = new Map<number, { [participantId: number]: number | null }>();
-    let maxRound = 0;
-    this.guestBoard.participants.forEach(p => {
-        p.scores.forEach(s => {
-            const round = roundsMap.get(s.roundNumber) || {};
-            round[p.id] = s.scoreValue;
-            roundsMap.set(s.roundNumber, round);
-            if (s.roundNumber > maxRound) { maxRound = s.roundNumber; }
-        });
-    });
-    this.roundsData = Array.from({ length: maxRound }, (_, i) => i + 1)
-        .map(roundNum => {
-            const scoresForRound = roundsMap.get(roundNum) || {};
-            // S'assurer que chaque participant a une entrée, même si elle est nulle
-            if (!this.guestBoard) { // Cette ligne empêche toute erreur si la méthode est appelée par erreur
-              return { roundNumber: roundNum, scores: {} };
-            }
-            this.guestBoard.participants.forEach(p => {
-                if (!scoresForRound.hasOwnProperty(p.id)) { scoresForRound[p.id] = null; }
-            });
-            return { roundNumber: roundNum, scores: scoresForRound };
-        });
-}
 }

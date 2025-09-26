@@ -1,0 +1,109 @@
+<!-- Fichier : src/app/components/scoreboard/scoreboard.component.html -->
+
+<!-- On ne rend le contenu que si l'objet `board` a été fourni par le parent -->
+<ng-container *ngIf="board">
+
+  <!-- Section pour afficher les règles du jeu (Score Cible, Nombre de tours) -->
+  <div class="rules-info">
+    <mat-card *ngIf="board.targetScore">
+      <mat-card-content>
+        <div class="info-item">
+          <mat-icon color="primary">emoji_events</mat-icon>
+          <div>
+            <!-- Utilisation de mat-card-title pour la sémantique, mais le style est contrôlé par CSS -->
+            <mat-card-title>Score Cible : {{ board.targetScore }}</mat-card-title>
+            <div class="subtext" *ngIf="board.scoreCondition === 'HIGHEST_WINS'">Le plus haut score gagne</div>
+            <div class="subtext" *ngIf="board.scoreCondition === 'LOWEST_WINS'">Le plus bas score gagne</div>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+    <mat-card *ngIf="board.numberOfRounds">
+      <mat-card-content>
+        <div class="info-item">
+          <mat-icon color="primary">replay</mat-icon>
+          <mat-card-title>Nombre de tours : {{ board.numberOfRounds }}</mat-card-title>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Titre de la section Classement -->
+  <h2>Classement</h2>
+
+  <!-- Conteneur pour la liste des cartes de participants -->
+  <div class="participant-list">
+
+    <!-- Boucle sur chaque participant du tableau -->
+    <mat-card *ngFor="let participant of sortedParticipants; let i = index" class="participant-card">
+      
+      <!-- Conteneur principal utilisant Flexbox pour la mise en page -->
+      <div class="card-layout">
+
+        <!-- SECTION DE GAUCHE : Informations sur le participant -->
+        <div class="info-section">
+          <div mat-card-avatar class="rank-avatar">{{ i + 1 }}</div>
+          <div class="participant-details">
+            <div class="participant-name">{{ participant.name }}</div>
+            <!-- Affichage conditionnel des points restants -->
+            <div *ngIf="board.targetScore && !gameStatus?.isGameOver" class="points-to-goal">
+              <ng-container *ngIf="board.scoreCondition === 'HIGHEST_WINS'">
+                {{ board.targetScore - getParticipantTotalScore(participant) }} points restants
+              </ng-container>
+              <ng-container *ngIf="board.scoreCondition === 'LOWEST_WINS'">
+                {{ getParticipantTotalScore(participant) - board.targetScore }} points avant défaite
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <!-- SECTION DE DROITE : Score et Bouton d'Action -->
+        <div class="score-action-section">
+          <button mat-flat-button color="primary" class="score-button"
+                  (click)="addScore.emit(participant)"
+                  [disabled]="gameStatus?.isGameOver"
+                  [attr.aria-label]="'Ajouter un score pour ' + participant.name">
+            <div class="score-display">
+              <span class="score-value">{{ getParticipantTotalScore(participant) }}</span>
+              <span class="score-label">points</span>
+            </div>
+          </button>
+        </div>
+
+      </div>
+    </mat-card>
+
+    <!-- Message affiché si la liste des participants est vide -->
+    <p *ngIf="!board.participants || board.participants.length === 0" class="empty-list-info">
+      Ajoutez des participants pour commencer le classement !
+    </p>
+  </div>
+
+  <!-- Titre de la section de l'historique des tours -->
+  <h2 *ngIf="roundsData.length > 0">Historique des Tours</h2>
+
+  <!-- Conteneur du tableau récapitulatif (affiché uniquement s'il y a des scores) -->
+  <div *ngIf="roundsData.length > 0" class="table-container">
+    <table mat-table [dataSource]="roundsData" class="mat-elevation-z8">
+
+      <!-- Colonne "Tour" -->
+      <ng-container matColumnDef="roundNumber">
+        <th mat-header-cell *matHeaderCellDef> Tour </th>
+        <td mat-cell *matCellDef="let round"> {{ round.roundNumber }} </td>
+      </ng-container>
+
+      <!-- Colonnes des Participants (générées dynamiquement) -->
+      <ng-container *ngFor="let participantId of participantIds" [matColumnDef]="participantId.toString()">
+        <th mat-header-cell *matHeaderCellDef> {{ participantMap.get(participantId) }} </th>
+        <td mat-cell *matCellDef="let round"> 
+          {{ round.scores[participantId] !== null ? round.scores[participantId] : '-' }} 
+        </td>
+      </ng-container>
+
+      <!-- Définition des lignes d'en-tête et de données -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+</ng-container>

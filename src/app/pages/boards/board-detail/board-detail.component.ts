@@ -20,7 +20,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatMenuModule } from '@angular/material/menu'; 
 import { ConfirmComponent } from '../../../components/dialogs/confirm/confirm.component';
 import { NotificationService } from '../../../services/notification.service';
-import { TotalScorePipe } from '../../../pipes/total-score.pipe'; 
+import { ScoreboardComponent } from '../../../components/scoreboard/scoreboard.component';
+import { GameStatus, calculateGameStatus } from '../../../utils/game-status.utils';
 
 @Component({
   selector: 'app-board-detail',
@@ -35,7 +36,7 @@ import { TotalScorePipe } from '../../../pipes/total-score.pipe';
     MatDialogModule,
     MatTableModule,
     MatMenuModule,
-    TotalScorePipe
+    ScoreboardComponent
   ],
   templateUrl: './board-detail.component.html',
   styleUrl: './board-detail.component.scss'
@@ -49,7 +50,8 @@ export class BoardDetailComponent implements OnInit {
   private notificationService = inject(NotificationService);
 
   board$!: Observable<Board>;
-  // Ajout pour pouvoir recharger les données
+  gameStatus: GameStatus | null = null;
+  // Pour pouvoir recharger les données
   private refreshBoard$ = new Subject<void>();
   roundsData: RoundData[] = [];
   displayedColumns: string[] = [];
@@ -65,65 +67,13 @@ export class BoardDetailComponent implements OnInit {
           startWith(undefined),
           switchMap(() => this.boardService.getBoardById(boardId)),
           // Utiliser tap pour exécuter du code avec les données reçues
-          tap(board => this.processBoardData(board)) // <-- ON TRANSFORME LES DONNÉES ICI
+          tap(board => this.gameStatus = calculateGameStatus(board)) // <-- ON TRANSFORME LES DONNÉES ICI
         );
       })
     );
   }
 
-   private processBoardData(board: Board): void {
-    if (!board || !board.participants) {
-      return;
-    }
-
-    // 1. Créer la map des participants pour un accès facile au nom
-    this.participantMap.clear();
-    this.participantIds = [];
-    board.participants.forEach(p => this.participantMap.set(p.id, p.name));
-
-    // 2. Définir les colonnes du tableau Material
-    // La première colonne est "Tour", suivie des noms des participants
-    this.displayedColumns = ['roundNumber', ...board.participants.map(p => p.id.toString())];
-    board.participants.forEach(p => {
-      this.participantMap.set(p.id, p.name);
-      this.participantIds.push(p.id); // <-- Remplir le tableau
-    });
-
-    // 3. Transformer les données
-    this.displayedColumns = ['roundNumber', ...board.participants.map(p => p.id.toString())];
-    const roundsMap = new Map<number, { [participantId: number]: number | null }>();
-    let maxRound = 0;
-
-    board.participants.forEach(p => {
-      p.scores.forEach(s => {
-        const round = roundsMap.get(s.roundNumber) || {};
-        round[p.id] = s.scoreValue;
-        roundsMap.set(s.roundNumber, round);
-        if (s.roundNumber > maxRound) {
-          maxRound = s.roundNumber;
-        }
-      });
-    });
-    
-
-    // 4. Convertir la map en tableau trié
-    this.roundsData = Array.from({ length: maxRound }, (_, i) => i + 1)
-      .map(roundNum => {
-        const scoresForRound = roundsMap.get(roundNum) || {};
-        // S'assurer que chaque participant a une entrée pour ce tour (même si c'est null)
-        board.participants.forEach(p => {
-          if (!scoresForRound.hasOwnProperty(p.id)) {
-            scoresForRound[p.id] = null;
-          }
-        });
-        return {
-          roundNumber: roundNum,
-          scores: scoresForRound
-        };
-      });
-  }
-
-   openManageParticipantsDialog(board: Board): void {
+  openManageParticipantsDialog(board: Board): void {
     const dialogRef = this.dialog.open(ManageParticipantsComponent, {
       width: '450px',
       data: { boardId: board.id, participants: board.participants }

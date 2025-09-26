@@ -1,5 +1,24 @@
 @use 'styles/variables' as vars;
 
+.participant-card {
+  // Enlever le padding par défaut de la carte pour un contrôle total
+  padding: 0 !important;
+}
+
+// Conteneur principal Flexbox
+.card-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px; // Mettre le padding ici
+}
+
+.info-section {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
 .header {
   display: flex;
   align-items: center;
@@ -30,6 +49,17 @@ h1 {
   gap: 16px;
 }
 
+.participant-name {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: vars.$text-primary-color;
+}
+
+.participant-details {
+  display: flex;
+  flex-direction: column;
+}
+
 .rank-avatar {
   background-color: vars.$primary-color;
   color: vars.$avatar-color;
@@ -37,6 +67,42 @@ h1 {
   justify-content: center;
   align-items: center;
   font-weight: bold;
+}
+
+// --- Section de Droite ---
+.score-action-section {
+  // Styles pour le conteneur du bouton
+}
+
+.score-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.score-value {
+  font-size: 2rem;
+  font-weight: bold;
+  line-height: 1.1;
+}
+
+.score-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.score-button {
+  // Rendre le bouton plus grand et plus engageant
+  height: auto;
+  padding: 12px 24px;
+  border-radius: 8px;
+  line-height: 1; // Pour un meilleur contrôle vertical
+  
+  // Style pour le bouton désactivé
+  &.mdc-button--disabled {
+    background-color: rgba(255, 255, 255, 0.12) !important;
+  }
 }
 
 .loading-spinner {
@@ -85,6 +151,14 @@ th.mat-column-roundNumber, td.mat-column-roundNumber {
     flex-direction: column;
 }
 
+.participant-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px; 
+  flex-grow: 1;
+  align-items: center; 
+}
+
 .game-status-card {
   margin-bottom: 24px;
   background-color: rgba(0, 0, 0, 0.2); // Une couleur subtile
@@ -104,6 +178,25 @@ th.mat-column-roundNumber, td.mat-column-roundNumber {
   font-size: 1.1rem;
 }
 
+.score-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.total-score {
+  // Style pour le score total, si nécessaire
+  font-weight: bold;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.total-score .points-label {
+  font-size: 1rem;
+  color: vars.$text-secondary-color;
+}
+
 .game-over {
   justify-content: center;
   color: #69f0ae; // Vert
@@ -118,8 +211,8 @@ th.mat-column-roundNumber, td.mat-column-roundNumber {
 
 .points-to-goal {
   color: rgba(255, 255, 255, 0.5);
-  margin-left: 8px;
   font-style: italic;
+  font-size: 0.9em;
 }
 
 // Griser le bouton "Ajouter Score" si la partie est finie
