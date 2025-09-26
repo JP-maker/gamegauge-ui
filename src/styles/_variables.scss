@@ -18,10 +18,11 @@ $warn-color: #cf6679;    // Rouge clair (style Material Dark)
 // --- AUTRES VARIABLES ---
 $border-radius: 4px; // Rayon des bordures
 $box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); // Ombre portée standard
+$avatar-color: white; // Couleur du texte dans les avatars
+$disabled-button-bg: rgba(255, 255, 255, 0.12); // Fond des boutons désactivés
 
 // --- COULEURS DES SECTIONS SPÉCIFIQUES ---
 $section-hero-bg: #121212; // Fond principal
 $section-board-bg: #212121; // Un gris un peu plus clair
 $section-cta-bg: #303030;   // Un autre gris
 
-$avatar-color: white; // Couleur du texte dans les avatars
