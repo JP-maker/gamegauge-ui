@@ -30,6 +30,37 @@ h1 {
   margin: 0;
 }
 
+.game-status-card {
+  margin-bottom: 24px;
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.status-grid {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.1rem;
+}
+
+.game-over {
+  justify-content: center;
+  color: #69f0ae; // Vert
+  font-size: 1.2rem;
+  
+  strong {
+    display: block;
+    margin-top: 4px;
+    font-size: 1.3rem;
+  }
+}
+
 .rules-info {
   display: flex;
   gap: 16px;
@@ -53,6 +84,17 @@ h1 {
   font-size: 1.2rem;
   font-weight: 500;
   color: vars.$text-primary-color;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.winner-crown {
+  color: #FFD700; // Couleur or
+  // Agrandir légèrement l'icône
+  font-size: 28px;
+  height: 28px;
+  width: 28px;
 }
 
 .participant-details {

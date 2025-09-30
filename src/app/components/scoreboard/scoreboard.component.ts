@@ -1,6 +1,7 @@
 // Fichier : src/app/components/scoreboard/scoreboard.component.ts
 
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
+import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Board, Participant } from '../../models/board.model';
 import { RoundData } from '../../models/round.model';
@@ -25,7 +26,24 @@ import { MatTableModule } from '@angular/material/table';
     MatTableModule
   ],
   templateUrl: './scoreboard.component.html',
-  styleUrl: './scoreboard.component.scss'
+  styleUrl: './scoreboard.component.scss',
+  animations: [
+    trigger('crownAnimation', [
+      // L'état de transition `:enter` se déclenche quand l'élément est ajouté au DOM
+      transition(':enter', [
+        // État initial (avant l'animation)
+        style({
+          transform: 'scale(0.5)', // Commence à 50% de sa taille
+          opacity: 0                // Complètement transparent
+        }),
+        // Animation vers l'état final
+        animate('300ms ease-out', style({
+          transform: 'scale(1)',   // Finit à 100% de sa taille
+          opacity: 1                  // Complètement opaque
+        }))
+      ])
+    ])
+  ]
 })
 export class ScoreboardComponent implements OnChanges {
   // --- ENTRÉES (Inputs) ---

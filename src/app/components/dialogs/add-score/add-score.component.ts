@@ -1,10 +1,11 @@
+// Fichier : src/app/components/dialogs/add-score/add-score.component.ts
+
 import { Component, Inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
-import { NotificationService } from '../../../services/notification.service'; 
 
-// Imports Material
+// Imports pour Angular Material
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
@@ -23,40 +24,49 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './add-score.component.html',
   styleUrl: './add-score.component.scss'
 })
-
 export class AddScoreComponent {
-  // Déclarer le formulaire, mais ne pas l'initialiser ici
+  // Déclaration du formulaire
   addScoreForm: FormGroup;
 
-  // Le constructeur est maintenant responsable de TOUTE l'initialisation
+  /**
+   * Le constructeur est responsable de l'injection des dépendances et de
+   * l'initialisation du formulaire.
+   */
   constructor(
     private fb: FormBuilder,
     public dialogRef: MatDialogRef<AddScoreComponent>,
-    // @Inject est la manière correcte de recevoir les données dans un dialogue
+    // Injection des données passées par le composant parent (ex: `BoardDetailComponent`)
+    // Ces données sont utilisées pour l'affichage et l'initialisation.
     @Inject(MAT_DIALOG_DATA) public data: { 
-      boardId: number, 
-      participantId: number, 
       participantName: string, 
       nextRoundNumber: number 
-    },
-    private notificationService: NotificationService
+    }
   ) {
-    // Initialiser le formulaire ICI, à l'intérieur du constructeur,
-    // où 'this.data' est garanti d'être disponible.
+    // Initialisation du formulaire réactif.
+    // On utilise les données injectées pour pré-remplir le numéro du tour.
     this.addScoreForm = this.fb.group({
       scoreValue: [0, Validators.required],
       roundNumber: [this.data.nextRoundNumber, [Validators.required, Validators.min(1)]]
     });
   }
 
+  /**
+   * Méthode appelée lors de la soumission du formulaire.
+   * Si le formulaire est valide, elle ferme le dialogue en retournant
+   * les valeurs du formulaire au composant parent.
+   */
   onSave(): void {
     if (this.addScoreForm.valid) {
-      // On ferme le dialogue en retournant les valeurs du formulaire
-      this.notificationService.showSuccess(`Score enregistré pour ${this.data.participantName}.`);
+      // Le dialogue se ferme et passe les données à la méthode `afterClosed()`
+      // du composant qui l'a ouvert.
       this.dialogRef.close(this.addScoreForm.value);
     }
-}
+  }
 
+  /**
+   * Méthode appelée lorsque l'utilisateur clique sur "Annuler".
+   * Ferme le dialogue sans retourner de données.
+   */
   onCancel(): void {
     this.dialogRef.close();
   }

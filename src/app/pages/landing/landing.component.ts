@@ -15,6 +15,7 @@ import { ScoreEntryResponse } from '../../models/score-entry.model';
 import { ConfirmComponent } from '../../components/dialogs/confirm/confirm.component';
 import { CreateBoardComponent } from '../../components/dialogs/create-board/create-board.component';
 import { ScoreboardComponent } from '../../components/scoreboard/scoreboard.component';
+import { GameStatus, calculateGameStatus } from '../../utils/game-status.utils';
 
 @Component({
   selector: 'app-landing',
@@ -38,6 +39,7 @@ export class LandingComponent implements OnInit {
 
   guestBoard: Board | null = null;
   isNewBoard = false;
+  gameStatus: GameStatus | null = null;
 
   ngOnInit(): void {
     this.loadGuestBoard();
@@ -159,6 +161,7 @@ export class LandingComponent implements OnInit {
     dialogRef.afterClosed().subscribe(confirmed => {
       if (confirmed) {
         this.localStorageService.clearGuestBoard(); // Efface les données du stockage
+        this.gameStatus = null;
         this.loadGuestBoard(); // Recharge le composant (ce qui affichera le bouton "Démarrer")
       }
     });
@@ -167,6 +170,7 @@ export class LandingComponent implements OnInit {
   private saveState(): void {
     if (!this.guestBoard) return;
     this.localStorageService.saveGuestBoard(this.guestBoard);
+    this.gameStatus = calculateGameStatus(this.guestBoard);
     this.guestBoard = { ...this.guestBoard };
   }
 }

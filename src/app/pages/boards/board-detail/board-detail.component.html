@@ -1,57 +1,39 @@
-<ng-container *ngIf="board$ | async as board; else loading">
-  <div class="header">
-    <a routerLink="/boards" mat-mini-fab aria-label="Retour à la liste des tableaux">
-      <mat-icon>arrow_back</mat-icon>
-    </a>
-    <h1>{{ board.name }}</h1>
-    <span class="spacer"></span> <!-- Ajouter un spacer -->
-    <button mat-fab (click)="openManageParticipantsDialog(board)" aria-label="Gérer les participants">
-      <mat-icon>group</mat-icon>
-    </button>
-    <button mat-fab [matMenuTriggerFor]="menu" aria-label="Menu d'actions du tableau">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="onDeleteBoard(board.id, board.name)">
-        <mat-icon>delete</mat-icon>
-        <span>Supprimer</span>
+<ng-container *ngIf="vm$ | async as vm; else loading">
+  <ng-container *ngIf="vm">
+    <div class="header">
+      <a routerLink="/boards" mat-mini-fab aria-label="Retour à la liste des tableaux">
+        <mat-icon>arrow_back</mat-icon>
+      </a>
+      <h1>{{ vm.board.name }}</h1>
+      <span class="spacer"></span> <!-- Ajouter un spacer -->
+      <button mat-fab (click)="openManageParticipantsDialog(vm.board)" aria-label="Gérer les participants">
+        <mat-icon>group</mat-icon>
       </button>
-    </mat-menu>
-  </div>
+      <button mat-fab [matMenuTriggerFor]="menu" aria-label="Menu d'actions du tableau">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onDeleteBoard(vm.board.id, vm.board.name)">
+          <mat-icon>delete</mat-icon>
+          <span>Supprimer</span>
+        </button>
+      </mat-menu>
+    </div>
 
-  <mat-card class="game-status-card" *ngIf="gameStatus">
-  <mat-card-content>
-      <!-- Si la partie est terminée -->
-      <div *ngIf="gameStatus.isGameOver" class="status-item game-over">
-        <mat-icon>flag</mat-icon>
-        <div>
-          <span>Partie terminée !</span>
-          <strong *ngIf="gameStatus.winner">Vainqueur : {{ gameStatus.winner.name }}</strong>
-        </div>
-      </div>
+    <app-scoreboard 
+      [board]="vm.board"
+      [gameStatus]="vm.gameStatus"
+      (addScore)="openAddScoreDialog(vm.board.id, $event)"
+      (manageParticipants)="openManageParticipantsDialog(vm.board)">
+    </app-scoreboard>
 
-      <!-- Si la partie est en cours -->
-      <div *ngIf="!gameStatus.isGameOver" class="status-grid">
-        <div class="status-item">
-          <mat-icon>timeline</mat-icon>
-          <span>Tour Actuel : {{ gameStatus.currentRound }}</span>
-        </div>
-        <div class="status-item" *ngIf="gameStatus.remainingRounds !== undefined">
-          <mat-icon>hourglass_bottom</mat-icon>
-          <span>Tours Restants : {{ gameStatus.remainingRounds >= 0 ? gameStatus.remainingRounds : 0 }}</span>
-        </div>
-      </div>
-    </mat-card-content>
-  </mat-card>
+    </ng-container>
+  </ng-container>
+  
 
-  <app-scoreboard 
-    [board]="board"
-    [gameStatus]="gameStatus"
-    (addScore)="openAddScoreDialog(board.id, $event)"
-    (manageParticipants)="openManageParticipantsDialog(board)">
-  </app-scoreboard>
+  
 
-</ng-container>
+
 
 <ng-template #loading>
   <div class="loading-spinner">
