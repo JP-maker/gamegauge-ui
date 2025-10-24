@@ -1,5 +1,3 @@
-@use 'styles/variables' as vars;
-
 .header {
   display: flex;
   align-items: center;
@@ -31,8 +29,8 @@ h1 {
 }
 
 .rank-avatar {
-  background-color: vars.$primary-color;
-  color: vars.$avatar-color;
+  background-color: var(--primary-color);
+  color: var(--avatar-color);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -73,12 +71,12 @@ th.mat-column-roundNumber, td.mat-column-roundNumber {
 }
 
 .info-text {
-  color: vars.$warn-color; // Couleur de texte principale
+  color: var(--warn-color); // Couleur de texte principale
 }
 
 .subtext {
   font-size: 12px;
-  color: vars.$text-secondary-color;
+  color: var(--text-secondary-color);
 }
 .info-item > div {
     display: flex;
@@ -86,7 +84,7 @@ th.mat-column-roundNumber, td.mat-column-roundNumber {
 }
 
 .points-to-goal {
-  color: rgba(255, 255, 255, 0.5);
+  color: var(--text-secondary-color);
   margin-left: 8px;
   font-style: italic;
 }

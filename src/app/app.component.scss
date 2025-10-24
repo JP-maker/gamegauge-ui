@@ -1,6 +1,7 @@
 .main-toolbar {
   display: flex;
   justify-content: space-between; // Aligne les éléments
+  background-color: var(--primary-color);
 }
 
 .logo {

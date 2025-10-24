@@ -1,47 +1,96 @@
-/* You can add global styles to this file, and also import other style files */
+/* Fichier : src/styles.scss */
+
+// --- 1. IMPORTATIONS ---
+// Importer nos variables de design en premier pour qu'elles soient disponibles partout.
 @use 'styles/variables' as vars;
+// Importer le framework de theming d'Angular Material.
 @use '@angular/material' as mat;
 
+
+// --- 2. CONFIGURATION DE BASE D'ANGULAR MATERIAL ---
+// Inclure les styles fondamentaux (reset, typographie, etc.).
+// Ceci ne doit être fait qu'UNE SEULE FOIS dans toute l'application.
 @include mat.core();
 
-$gamegauge-primary: #bb86fc; // Violet clair (style Material Dark)
 
-$theme: mat.define-theme((
-  color: (
-    theme-type: dark,
-    primary: mat.$violet-palette,
-  ),
-  density: (
-    scale: -1
-  )
-));
 
-html {
-  height: 100%;
+// 4. TRADUIRE les variables Sass en variables CSS pour chaque thème
+.dark-theme {
+  --background-color: #{vars.$background-dark};
+  --surface-color: #{vars.$surface-dark};
+  --text-primary-color: #{vars.$text-primary-dark};
+  --text-secondary-color: #{vars.$text-secondary-dark};
+  --primary-color: #{vars.$primary-dark};
+  --accent-color: #{vars.$accent-dark};
+  --warn-color: #{vars.$warn-dark};
+  --success-bg-color: #{vars.$success-bg-dark};
+  --success-text-color: #{vars.$success-text-dark};
+  --error-bg-color: #{vars.$warn-dark}; // On peut réutiliser la variable warn
+  --error-text-color: #{vars.$success-text-dark};
+  --section-hero-bg: #{vars.$section-hero-bg-dark};
+  --section-board-bg: #{vars.$section-board-bg-dark};
+  --section-cta-bg: #{vars.$section-cta-bg-dark};
+  --avatar-bg-color: #{vars.$avatar-bg-dark};
+  --mdc-dialog-container-color: #{vars.$surface-dark};
+  --mdc-dialog-supporting-text-color: #{vars.$text-secondary-dark};
+  --mdc-dialog-subhead-color: #{vars.$text-primary-dark};
+  --mdc-outlined-text-field-input-text-color : #{vars.$text-primary-dark};
+  --mdc-list-list-item-label-text-color: #{vars.$text-primary-dark};
+  --mdc-elevated-card-container-color: #{vars.$surface-dark};
+  --mat-icon-color: #{vars.$text-primary-dark};
 }
 
-body { 
-  margin: 0; 
-  font-family: Roboto, "Helvetica Neue", sans-serif; 
-  background-color: vars.$background-color; 
-  color: vars.$text-primary-color;
+.light-theme {
+  --background-color: #{vars.$background-light};
+  --surface-color: #{vars.$surface-light};
+  --text-primary-color: #{vars.$text-primary-light};
+  --text-secondary-color: #{vars.$text-secondary-light};
+  --primary-color: #{vars.$primary-light};
+  --accent-color: #{vars.$accent-light};
+  --warn-color: #{vars.$warn-light};
+  --avatar-bg-color: #{vars.$avatar-bg-light};
+  --avatar-text-color: #{vars.$avatar-text-light};
+  --success-bg-color: #{vars.$success-bg-light};
+  --success-text-color: #{vars.$success-text-light};
+  --error-bg-color: #{vars.$warn-light};
+  --error-text-color: #{vars.$success-text-light};
+  --section-hero-bg: #{#{vars.$section-hero-bg-light}};
+  --section-board-bg: #{vars.$section-board-bg-light};
+  --section-cta-bg: #{vars.$section-cta-bg-light};
+  --avatar-bg-color: #{vars.$avatar-bg-light};
+  --mdc-dialog-container-color: #{vars.$surface-light};
+  --mdc-dialog-supporting-text-color: #{vars.$text-secondary-light};
+  --mdc-dialog-subhead-color: #{vars.$text-primary-light};
+  --mdc-outlined-text-field-input-text-color : #{vars.$text-primary-light};
+  --mdc-list-list-item-label-text-color: #{vars.$text-primary-light};
+  --mdc-elevated-card-container-color: #{vars.$surface-light};
+  --mat-icon-color: #{vars.$text-primary-light};
 }
 
+
+// --- 5. STYLES GLOBAUX utilisant les variables CSS ---
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: vars.$font-family; 
+  background-color: var(--background-color);
+  color: var(--text-primary-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
 a {
-  color: vars.$accent-color; // <-- UTILISATION
-  text-decoration: none;
-  &:hover {
-    text-decoration: underline;
+  color: var(--accent-color);
+}
+
+.mat-mdc-raised-button[color] {
+  // Forcer la couleur du texte à l'intérieur du bouton
+  background-color: var(--primary-color) !important;
+  .mdc-button__label {
+    color: var(--text-primary-color) !important;
   }
 }
 
-mat-card {
-  width: 100%;
-  max-width: 400px;
-}
-
 mat-card-title {
-  color: antiquewhite;
+  color: var(--text-primary-color);
   font-size: 24px;
   font-weight: 500;
   padding-bottom: 8px;
@@ -55,8 +104,14 @@ mat-card-actions a {
   color: #90caf9; // Couleur primaire claire de Material
 }
 
+/* STYLES GLOBAUX POUR LES DIALOGUES MAT-DIALOG */
 mat-dialog-content {
   padding-top: 10px !important;
+}
+
+[data-theme='dark-theme'] {
+  --mdc-dialog-container-color: #2a2a2a; /* Thème sombre */
+  --mdc-dialog-supporting-text-color: #f5f5f5;
 }
 
 form {
@@ -74,31 +129,27 @@ button[mat-raised-button] {
 }
 
 .error-message {
-  color: #f44336; // Couleur d'erreur de Material
+  color: var(--error-text-color);
   text-align: center;
   margin-bottom: 16px;
 }
 
-mat-card-actions {
-  margin-top: 16px;
-  display: flex;
-  justify-content: center;
-}
+
 
 /* STYLES GLOBAUX POUR LES NOTIFICATIONS SNACKBAR */
 
 // Style pour les notifications de succès
 .snackbar-success {
   // Appliquer les couleurs de la palette "accent" de notre thème
-  --mdc-snackbar-container-color: #69f0ae; // Vert Material
-  --mat-mdc-snack-bar-button-color: #000;
-  --mdc-snackbar-supporting-text-color: #000;
+  --mdc-snackbar-container-color: var(--success-bg-color);
+  --mat-mdc-snack-bar-button-color: var(--success-text-color);
+  --mdc-snackbar-supporting-text-color: var(--success-text-color);
 }
 
 // Style pour les notifications d'erreur
 .snackbar-error {
   // Appliquer les couleurs de la palette "warn" (rouge) de notre thème
-  --mdc-snackbar-container-color: #f44336; // Rouge Material (warn)
-  --mat-mdc-snack-bar-button-color: #fff;
-  --mdc-snackbar-supporting-text-color: #fff;
+  --mdc-snackbar-container-color: var(--error-bg-color);
+  --mat-mdc-snack-bar-button-color: var(--error-text-color);
+  --mdc-snackbar-supporting-text-color: var(--error-text-color);
 }

@@ -1,28 +1,70 @@
-// --- COULEURS DE BASE ---
-// Couleurs neutres pour le fond et les surfaces (cartes, dialogues, etc.)
-$background-color: #121212;
-$surface-color: #212121;
-$surface-highlight-color: #303030;
+/* Fichier: src/styles/_variables.scss */
+/* Source de vérité unique pour toutes les couleurs et styles. */
 
-// Couleurs pour les textes
-$text-primary-color: #ffffff;      // Texte principal
-$text-secondary-color: rgba(255, 255, 255, 0.7); // Texte secondaire, sous-titres
-$text-disabled-color: rgba(255, 255, 255, 0.5);  // Texte désactivé
+// --- TYPOGRAPHIE ---
+$font-family: 'Montserrat', sans-serif;
 
-// --- COULEURS DE LA MARQUE (THÈME) ---
-// On peut les lier aux palettes Material si on veut, ou les définir manuellement.
-$primary-color: #bb86fc; // Violet clair (style Material Dark)
-$accent-color: #03dac6;  // Cyan (style Material Dark)
-$warn-color: #cf6679;    // Rouge clair (style Material Dark)
+// =============================================================================
+// THÈME SOMBRE "GAMEGAUGE" (Votre thème personnalisé)
+// =============================================================================
+$background-dark: #121212;
+$surface-dark: #212121;
+$text-primary-dark: #ffffff;
+$text-secondary-dark: #005CBB; // Bleu pour le texte secondaire
 
-// --- AUTRES VARIABLES ---
-$border-radius: 4px; // Rayon des bordures
-$box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); // Ombre portée standard
-$avatar-color: white; // Couleur du texte dans les avatars
-$disabled-button-bg: rgba(255, 255, 255, 0.12); // Fond des boutons désactivés
+// Couleurs de la marque
+$primary-dark: #3272D8;
+$accent-dark: #42B0AC;
+$warn-dark: #cf6679;
 
-// --- COULEURS DES SECTIONS SPÉCIFIQUES ---
-$section-hero-bg: #121212; // Fond principal
-$section-board-bg: #212121; // Un gris un peu plus clair
-$section-cta-bg: #303030;   // Un autre gris
+// Couleurs de statut
+$success-bg-dark: #69f0ae;
+$success-text-dark: #000000;
+$error-bg-dark: #f44336;
+$error-text-dark: #000000;
 
+// Couleurs des avatars
+$avatar-bg-dark: $primary-dark;
+$avatar-text-dark: #ffffff;
+
+// Couleurs des sections de la landing page
+$section-hero-bg-dark: #333333;
+$section-board-bg-dark: #212121;
+$section-cta-bg-dark: #333333;
+
+
+// =============================================================================
+// THÈME CLAIR "GOOGLE STORE"
+// =============================================================================
+$background-light: #f8f9fa;
+$surface-light: #ffffff;
+$text-primary-light: #202124;
+$text-secondary-light: #5f6368;
+
+// Couleurs de la marque
+$primary-light: #1a73e8;
+$accent-light: #1a73e8;
+$warn-light: #d93025;
+
+// Couleurs de statut
+$success-bg-light: #1e8e3e;
+$success-text-light: #ffffff;
+$error-bg-light: #f44336;
+$error-text-light: #ffffff;
+
+// Couleurs des avatars
+$avatar-bg-light: $primary-light;
+$avatar-text-light: #ffffff;
+
+// Couleurs des sections de la landing page
+$section-hero-bg-light: $background-light;
+$section-board-bg-light: $surface-light;
+$section-cta-bg-light: $background-light;
+
+
+// =============================================================================
+// VALEURS DE DESIGN GLOBALES
+// =============================================================================
+$border-radius: 8px;
+$box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
+$disabled-button-bg: rgba(255, 255, 255, 0.12);

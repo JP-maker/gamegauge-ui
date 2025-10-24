@@ -4,9 +4,16 @@ form {
   gap: 8px;
 }
 
+// Style pour la section des radio-buttons
 .score-condition-group {
   margin-top: 16px;
   margin-bottom: 8px;
+
+  // Le label au-dessus des boutons
+  label {
+    // Utiliser la couleur de texte secondaire du thème actuel
+    color: var(--text-secondary-color);
+  }
 
   mat-radio-group {
     display: flex;

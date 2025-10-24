@@ -1,9 +1,15 @@
-<mat-toolbar color="primary" class="main-toolbar">
+<mat-toolbar class="main-toolbar">
   <a routerLink="/" class="logo">
     <mat-icon>assessment</mat-icon>
     <span>GameGauge</span>
   </a>
   <span class="spacer"></span>
+  <!-- BOUTON DE THÈME -->
+  <button mat-icon-button (click)="themeService.toggleTheme()" aria-label="Changer de thème">
+    <!-- On affiche une icône différente en fonction du thème actuel -->
+    <mat-icon *ngIf="themeService.getCurrentTheme() === 'dark-theme'">light_mode</mat-icon>
+    <mat-icon *ngIf="themeService.getCurrentTheme() === 'light-theme'">dark_mode</mat-icon>
+  </button>
   <!-- On utilise le pipe `async` pour souscrire à notre Observable `isHandset$` -->
   <!-- Et on stocke le résultat (true/false) dans une variable locale `isHandset` -->
   <div *ngIf="authService.isLoggedIn(); else loggedOutButtons">

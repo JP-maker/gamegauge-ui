@@ -9,6 +9,24 @@
   }
 }
 
+mat-mdc-dialog-container {
+  color: var(--surface-color) !important;
+}
+
 mat-dialog-content {
   min-height: 200px;
+  padding-top: 10 !important; // Surcharge pour un meilleur alignement
+}
+
+// Style pour chaque élément de la liste
+mat-list-item {
+  // Cible le sous-titre (le score)
+  .mat-mdc-list-item-line {
+    // Utiliser la couleur de texte secondaire
+    color: var(--text-secondary-color);
+  }
+}
+
+.matListItemTitle {
+  color: var(--text-primary-color);
 }

@@ -1,8 +1,8 @@
-@use 'styles/variables' as vars;
 
 .participant-card {
   // Enlever le padding par défaut de la carte pour un contrôle total
   padding: 0 !important;
+  background-color: var(--background-color);
 }
 
 // Conteneur principal Flexbox
@@ -32,7 +32,7 @@ h1 {
 
 .game-status-card {
   margin-bottom: 24px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: var(--surface-highlight-color);
 }
 
 .status-grid {
@@ -83,7 +83,7 @@ h1 {
 .participant-name {
   font-size: 1.2rem;
   font-weight: 500;
-  color: vars.$text-primary-color;
+  color: var(--text-primary-color);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -103,8 +103,8 @@ h1 {
 }
 
 .rank-avatar {
-  background-color: vars.$primary-color;
-  color: vars.$avatar-color;
+  background-color: var(--avatar-bg-color); // <-- Utiliser la nouvelle variable
+  color: var(--avatar-text-color);           // <-- Utiliser la nouvelle variable
   display: flex;
   justify-content: center;
   align-items: center;
@@ -122,12 +122,13 @@ h1 {
   font-size: 2rem;
   font-weight: bold;
   line-height: 1.1;
+  color: var(--text-primary-color);
 }
 
 .score-label {
   font-size: 0.8rem;
   text-transform: uppercase;
-  color: vars.$text-secondary-color;
+  color: var(--text-secondary-color);
 }
 
 .score-button {
@@ -136,10 +137,11 @@ h1 {
   padding: 12px 24px;
   border-radius: 8px;
   line-height: 1; // Pour un meilleur contrôle vertical
+  background-color: var(--surface-color);
   
   // Style pour le bouton désactivé
   &.mdc-button--disabled {
-    background-color: vars.$disabled-button-bg !important;
+    background-color: var(--disabled-button-bg) !important;
   }
 }
 
@@ -159,6 +161,7 @@ h2 {
 .table-container {
   width: 100%;
   overflow: auto; // Ajoute une barre de défilement si le tableau est trop large
+  color: var(--surface-color);
 }
 
 table {
@@ -177,12 +180,12 @@ th.mat-column-roundNumber, td.mat-column-roundNumber {
 }
 
 .info-text {
-  color: vars.$warn-color; // Couleur de texte principale
+  color: var(--warn-color); // Couleur de texte principale
 }
 
 .subtext {
   font-size: 12px;
-  color: vars.$text-secondary-color;
+  color: var(--text-secondary-color);
 }
 .info-item > div {
     display: flex;
@@ -199,7 +202,7 @@ th.mat-column-roundNumber, td.mat-column-roundNumber {
 
 .game-status-card {
   margin-bottom: 24px;
-  background-color: vars.$surface-highlight-color;
+  background-color: var(--surface-highlight-color);
 }
 
 .status-grid {
@@ -232,7 +235,7 @@ th.mat-column-roundNumber, td.mat-column-roundNumber {
 
 .total-score .points-label {
   font-size: 1rem;
-  color: vars.$text-secondary-color;
+  color: var(--text-secondary-color);
 }
 
 .game-over {
@@ -248,9 +251,19 @@ th.mat-column-roundNumber, td.mat-column-roundNumber {
 }
 
 .points-to-goal {
-  color: vars.$text-secondary-color;
+  color: var(--text-secondary-color);
   font-style: italic;
   font-size: 0.9em;
+}
+
+
+.mat-mdc-table{
+  background-color: var(--surface-color);
+  color: var(--text-primary-color);
+}
+
+.mat-mdc-header-row, .mat-mdc-row {
+  color: var(--text-primary-color) !important;
 }
 
 // Griser le bouton "Ajouter Score" si la partie est finie

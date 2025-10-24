@@ -4,6 +4,7 @@ import { AsyncPipe, CommonModule } from '@angular/common';
 import { Observable } from 'rxjs'; // <-- NOUVEL IMPORT
 import { map, shareReplay, startWith } from 'rxjs/operators'; // <-- NOUVEL IMPORT: startWith, shareReplay
 import { AuthService } from './services/auth.service';
+import { ThemeService } from './services/theme.service';
 
 // Imports pour Angular CDK Layout
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'; // <-- NOUVEAUX IMPORTS
@@ -32,6 +33,12 @@ export class AppComponent {
   // Injecter le BreakpointObserver
   private breakpointObserver = inject(BreakpointObserver);
   public authService = inject(AuthService);
+  public themeService = inject(ThemeService);
+
+  constructor() {
+    // Appeler le constructeur du service pour qu'il s'initialise au démarrage de l'app
+    this.themeService; 
+  }
 
   // Créer un Observable qui émet `true` si l'écran correspond à la taille d'un smartphone
   isHandset$: Observable<boolean> = this.breakpointObserver.observe(Breakpoints.Handset)
