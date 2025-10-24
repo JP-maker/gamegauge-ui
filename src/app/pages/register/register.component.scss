@@ -26,3 +26,15 @@ mat-card-actions p {
     }
   }
 }
+
+mat-hint {
+  // Par exemple, pour le mettre en italique
+  font-style: italic;
+  
+  // Si vous voulez changer sa couleur (en utilisant nos variables de thème)
+  color: var(--text-secondary-color);
+}
+
+mat-form-field {
+  margin-bottom: 1.2rem;
+}
