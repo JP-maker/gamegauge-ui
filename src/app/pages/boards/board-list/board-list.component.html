@@ -40,6 +40,10 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #cardMenu="matMenu">
+              <button mat-menu-item (click)="onDuplicateBoard(board.id, $event)">
+                <mat-icon>content_copy</mat-icon>
+                <span>Dupliquer</span>
+              </button>
               <button mat-menu-item (click)="onDeleteBoard(board.id, board.name, $event)">
                 <mat-icon>delete</mat-icon>
                 <span>Supprimer</span>

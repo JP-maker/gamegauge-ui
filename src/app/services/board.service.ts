@@ -91,18 +91,34 @@ export class BoardService {
   importBoard(boardData: Board): Observable<Board> {
   // On s'assure de n'envoyer que les champs nécessaires
   const payload = {
-    name: boardData.name,
-    targetScore: boardData.targetScore,
-    scoreCondition: boardData.scoreCondition,
-    numberOfRounds: boardData.numberOfRounds,
-    participants: boardData.participants.map(p => ({
-      name: p.name,
-      scores: p.scores.map(s => ({
-        scoreValue: s.scoreValue,
-        roundNumber: s.roundNumber
+      name: boardData.name,
+      targetScore: boardData.targetScore,
+      scoreCondition: boardData.scoreCondition,
+      numberOfRounds: boardData.numberOfRounds,
+      participants: boardData.participants.map(p => ({
+        name: p.name,
+        scores: p.scores.map(s => ({
+          scoreValue: s.scoreValue,
+          roundNumber: s.roundNumber
+        }))
       }))
-    }))
-  };
-  return this.http.post<Board>(`${this.apiUrl}/import`, payload);
-}
+    };
+    return this.http.post<Board>(`${this.apiUrl}/import`, payload);
+  }
+
+  /**
+   * Réinitialise tous les scores d'un tableau.
+   * @param boardId L'ID du tableau à redémarrer.
+   */
+  restartBoard(boardId: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/${boardId}/restart`, {});
+  }
+
+  /**
+   * Duplique un tableau de scores existant (règles et participants, sans les scores).
+   * @param boardId L'ID du tableau à dupliquer.
+   */
+  duplicateBoard(boardId: number): Observable<Board> {
+    return this.http.post<Board>(`${this.apiUrl}/${boardId}/duplicate`, {});
+  }
 }

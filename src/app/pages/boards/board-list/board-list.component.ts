@@ -121,4 +121,17 @@ export class BoardListComponent implements OnInit {
       }
     });
   }
+
+  onDuplicateBoard(boardId: number, event: MouseEvent): void {
+    event.stopPropagation(); // Indispensable pour ne pas naviguer en cliquant
+
+    this.boardService.duplicateBoard(boardId).subscribe(newBoard => {
+      this.notificationService.showSuccess(`Le tableau "${newBoard.name}" a été créé.`);
+      // Option 1 : Recharger toute la liste
+      this.loadBoards();
+      
+      // Option 2 (mieux) : Rediriger directement vers le nouveau tableau
+      // this.router.navigate(['/boards', newBoard.id]);
+    });
+  }
 }

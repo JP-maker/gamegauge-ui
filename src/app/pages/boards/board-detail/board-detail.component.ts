@@ -160,4 +160,23 @@ export class BoardDetailComponent implements OnInit {
       }
     });
   }
+
+  onRestartBoard(boardId: number, boardName: string): void {
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      data: {
+        title: 'Recommencer la partie',
+        message: `Voulez-vous vraiment remettre tous les scores de "${boardName}" à zéro ? Les participants seront conservés.`
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        this.boardService.restartBoard(boardId).subscribe(() => {
+          this.notificationService.showSuccess('La partie a été réinitialisée !');
+          // On rafraîchit les données pour mettre à jour la vue
+          this.refreshData();
+        });
+      }
+    });
+  }
 }

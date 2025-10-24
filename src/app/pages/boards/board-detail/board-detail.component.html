@@ -13,6 +13,10 @@
         <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="onRestartBoard(vm.board.id, vm.board.name)">
+          <mat-icon>restart_alt</mat-icon>
+          <span>Recommencer</span>
+        </button>
         <button mat-menu-item (click)="onDeleteBoard(vm.board.id, vm.board.name)">
           <mat-icon>delete</mat-icon>
           <span>Supprimer</span>

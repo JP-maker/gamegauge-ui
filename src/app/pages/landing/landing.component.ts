@@ -16,6 +16,7 @@ import { ConfirmComponent } from '../../components/dialogs/confirm/confirm.compo
 import { CreateBoardComponent } from '../../components/dialogs/create-board/create-board.component';
 import { ScoreboardComponent } from '../../components/scoreboard/scoreboard.component';
 import { GameStatus, calculateGameStatus } from '../../utils/game-status.utils';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-landing',
@@ -35,6 +36,7 @@ import { GameStatus, calculateGameStatus } from '../../utils/game-status.utils';
 })
 export class LandingComponent implements OnInit {
   private localStorageService = inject(LocalStorageService);
+  private notificationService = inject(NotificationService);
   private dialog = inject(MatDialog);
 
   guestBoard: Board | null = null;
@@ -163,6 +165,34 @@ export class LandingComponent implements OnInit {
         this.localStorageService.clearGuestBoard(); // Efface les données du stockage
         this.gameStatus = null;
         this.loadGuestBoard(); // Recharge le composant (ce qui affichera le bouton "Démarrer")
+      }
+    });
+  }
+
+  // Pour recommencer la partie
+  restartGame(): void {
+    if (!this.guestBoard) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ConfirmComponent, {
+      data: {
+        title: 'Recommencer la partie',
+        message: 'Voulez-vous vraiment remettre tous les scores à zéro pour commencer une nouvelle partie avec les mêmes joueurs ?'
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(confirmed => {
+      if (confirmed) {
+        // Logique de réinitialisation des scores
+        this.guestBoard!.participants.forEach(participant => {
+          participant.scores = []; // On vide le tableau des scores de chaque joueur
+        });
+
+        this.notificationService.showSuccess('La partie a été réinitialisée !');
+        
+        // On sauvegarde le nouvel état (avec les scores vides)
+        this.saveState(); 
       }
     });
   }
