@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom  } from '@angular/core';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -9,6 +9,9 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { authInterceptor } from './interceptors/auth.interceptor';
 
+import { NgxCaptchaModule } from 'ngx-captcha';
+import { environment } from '../environments/environment';
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideRouter(routes),
@@ -18,6 +21,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([
       authInterceptor
     ])), 
-    provideAnimations()
+    provideAnimations(),
+    importProvidersFrom(NgxCaptchaModule)
   ]
 };
