@@ -25,3 +25,52 @@
   align-items: center; // Aligne les boutons verticalement au centre
   gap: 8px; // Ajoute un petit espace entre les boutons
 }
+
+.app-footer {
+  mat-toolbar {
+    // Centrer le contenu du footer
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    // Appliquer nos couleurs de thème
+    background-color: var(--surface-color);
+    color: var(--text-secondary-color);
+    
+    // Rendre le texte un peu plus petit
+    font-size: 0.9em;
+    padding: 8px 16px; // Un peu moins haut qu'une toolbar normale
+    min-height: 48px;
+  }
+
+  a {
+    // S'assurer que le lien a une couleur visible
+    color: var(--accent-color);
+    font-weight: 500; // Le mettre un peu en gras pour qu'il ressorte
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px; // Un peu plus d'espace
+  text-decoration: none;
+  color: white;
+
+  // Style pour l'image du logo
+  img {
+    height: 55px; // Ajustez la hauteur selon vos préférences
+    width: auto;  // Garde les bonnes proportions
+  }
+  
+  // Style pour le nom du site à côté du logo
+  span {
+    font-family: 'Montserrat', sans-serif; // Assurer la bonne police
+    font-weight: 700; // Mettre en gras
+    font-size: 1.2rem;
+  }
+}
