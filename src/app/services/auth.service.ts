@@ -4,6 +4,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private apiUrl = 'http://localhost:8080/api/auth';
-
+  private apiUrl = environment.apiUrl + '/auth'; 
   /**
    * Envoie une requête de connexion à l'API.
    * Si la connexion réussit, le token est sauvegardé.

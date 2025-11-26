@@ -1,7 +1,6 @@
-
 export const environment = {
-  production: false,
-  apiUrl: 'http://localhost:8080/api',
+  production: true,
+  apiUrl: '/api',
   recaptcha: {
     siteKey: '6LddofUrAAAAALgsbiVLoWk58RM3ZDy1uKOnE-Kt' // Remplacez par votre clé publique
   }
