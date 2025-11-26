@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Board, Participant } from '../models/board.model'; // <-- Importer notre interface
 import { ScoreEntryResponse } from '../models/score-entry.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BoardService {
   private http = inject(HttpClient);
-  private apiUrl = 'http://localhost:8080/api/boards';
+  private apiUrl = environment.apiUrl + '/boards';
 
   /**
    * Récupère tous les tableaux de l'utilisateur authentifié.
