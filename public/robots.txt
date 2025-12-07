@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+
+# Bloquer l'accès aux pages inutiles pour Google
+Disallow: /api/
+Disallow: /admin/

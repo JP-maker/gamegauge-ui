@@ -24,6 +24,7 @@ import { AuthService } from '../../services/auth.service';
 import { NotificationService } from '../../services/notification.service';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { BoardService } from '../../services/board.service';
+import { Title } from '@angular/platform-browser'
 
 @Component({
   selector: 'app-login',
@@ -57,11 +58,16 @@ export class LoginComponent {
   // Obtenir la clé directement depuis le fichier d'environnement
   private readonly siteKey: string = environment.recaptcha.siteKey;
 
-  constructor() {
+  constructor(private titleService: Title) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required]]
     });
+  }
+
+  ngOnInit() {
+    // Change le nom de l'onglet quand on arrive sur cette page
+    this.titleService.setTitle('Connexion - GameGauge');
   }
 
   /**

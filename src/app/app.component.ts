@@ -13,6 +13,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'; // <-- NO
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { Title, Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -35,9 +36,14 @@ export class AppComponent {
   public authService = inject(AuthService);
   public themeService = inject(ThemeService);
 
-  constructor() {
+  constructor(private titleService: Title, private metaService: Meta) {
     // Appeler le constructeur du service pour qu'il s'initialise au démarrage de l'app
     this.themeService; 
+  }
+
+  ngOnInit() {
+    // Définit le titre par défaut au chargement
+    this.titleService.setTitle('GameGauge - Accueil');
   }
 
   // Créer un Observable qui émet `true` si l'écran correspond à la taille d'un smartphone
