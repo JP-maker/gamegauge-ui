@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
 import { ManageParticipantsComponent } from '../../components/dialogs/manage-participants/manage-participants.component';
 import { AddScoreComponent } from '../../components/dialogs/add-score/add-score.component';
 import { MatTableModule } from '@angular/material/table';
@@ -26,6 +27,7 @@ import { NotificationService } from '../../services/notification.service';
     RouterLink, 
     MatCardModule, 
     MatButtonModule, 
+    MatMenuModule,
     MatIconModule, 
     MatDialogModule, 
     MatTableModule, 
