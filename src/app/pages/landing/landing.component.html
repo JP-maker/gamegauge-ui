@@ -37,58 +37,55 @@
     <ng-template #boardView>
       <!-- En-tête du tableau -->
       <div class="header">
-        <h1>{{ guestBoard?.name }}</h1>
-        <div class="d-flex justify-content-end align-items-center gap-2">
-          <!-- ============================================ -->
-          <!-- VERSION ORDINATEUR (Caché sur petit écran)   -->
-          <!-- ============================================ -->
-          <!-- d-none = caché par défaut, d-md-block = visible à partir de la taille "Medium" -->
-          <div class="d-none d-md-flex gap-2">
+        <!-- ============================================ -->
+        <!-- VERSION ORDINATEUR (Caché sur petit écran)   -->
+        <!-- ============================================ -->
+        <div class="d-none d-md-flex gap-2">
+          <h1>{{ guestBoard?.name }}</h1>
+          <span class="spacer"></span>
+          <button mat-stroked-button (click)="openManageParticipantsDialog()">
+            <mat-icon>groups</mat-icon>
+            Gérer les participants
+          </button>
+          <button mat-stroked-button (click)="restartGame()">
+            <mat-icon>restart_alt</mat-icon>
+            Recommencer
+          </button>
+          <button mat-stroked-button color="warn" (click)="resetGuestBoard()">
+            <mat-icon>delete_sweep</mat-icon>
+            Effacer la partie
+          </button>
+        </div>
+        <!-- ============================================ -->
+        <!-- VERSION MOBILE (Visible uniquement sur petit écran) -->
+        <!-- ============================================ -->
+        <!-- d-md-none = caché à partir de la taille "Medium" (donc visible sur Small) -->
+        <div class="d-md-none">
+          
+          <!-- Le petit bouton rond avec 3 points -->
+          <button mat-icon-button [matMenuTriggerFor]="mobileMenu" aria-label="Options de la partie">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+
+          <!-- Le menu qui s'ouvre -->
+          <mat-menu #mobileMenu="matMenu">
             
-            <button mat-raised-button color="primary" (click)="openManageParticipantsDialog()">
-              <mat-icon>group</mat-icon> Gérer les participants
+            <button mat-menu-item (click)="openManageParticipantsDialog()">
+              <mat-icon>group</mat-icon>
+              <span>Gérer participants</span>
             </button>
 
-            <button mat-raised-button color="accent" (click)="restartGame()">
-              <mat-icon>refresh</mat-icon> Recommencer
+            <button mat-menu-item (click)="restartGame()">
+              <mat-icon>refresh</mat-icon>
+              <span>Recommencer</span>
             </button>
 
-            <button mat-raised-button color="warn" (click)="resetGuestBoard()">
-              <mat-icon>delete</mat-icon> Effacer la partie
+            <button mat-menu-item (click)="resetGuestBoard()">
+              <mat-icon color="warn">delete</mat-icon>
+              <span class="text-danger">Effacer la partie</span>
             </button>
 
-          </div>
-
-          <!-- ============================================ -->
-          <!-- VERSION MOBILE (Visible uniquement sur petit écran) -->
-          <!-- ============================================ -->
-          <!-- d-md-none = caché à partir de la taille "Medium" (donc visible sur Small) -->
-          <div class="d-md-none">
-            
-            <!-- Le petit bouton rond avec 3 points -->
-            <button mat-icon-button [matMenuTriggerFor]="mobileMenu" aria-label="Options de la partie">
-              <mat-icon>more_vert</mat-icon>
-            </button>
-
-            <!-- Le menu qui s'ouvre -->
-            <mat-menu #mobileMenu="matMenu">
-              
-              <button mat-menu-item (click)="openManageParticipantsDialog()">
-                <mat-icon>group</mat-icon>
-                <span>Gérer participants</span>
-              </button>
-              <button mat-menu-item (click)="restartGame()">
-                <mat-icon>refresh</mat-icon>
-                <span>Recommencer</span>
-              </button>
-              <button mat-menu-item (click)="resetGuestBoard()">
-                <mat-icon color="warn">delete</mat-icon>
-                <span class="text-danger">Effacer la partie</span>
-              </button>
-
-            </mat-menu>
-
-          </div>
+          </mat-menu>
 
         </div>
       </div>
