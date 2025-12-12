@@ -77,7 +77,11 @@ export class AuthService {
    */
   requestPasswordReset(email: string) {
     // Le backend attend un objet JSON, pas juste une string brute
-    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+    return this.http.post(
+      `${this.apiUrl}/forgot-password`, 
+      { email },  
+      { responseType: 'text' }
+    );
   }
 
   /**
@@ -86,6 +90,10 @@ export class AuthService {
    * @param newPassword Le nouveau mot de passe choisi par l'utilisateur.
    */
   resetPassword(token: string, newPassword: string) {
-    return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
+    return this.http.post(
+      `${this.apiUrl}/reset-password`, 
+      { token, newPassword },
+      { responseType: 'text' }
+    );
   }
 }

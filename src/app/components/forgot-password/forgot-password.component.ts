@@ -45,8 +45,8 @@ export class ForgotPasswordComponent {
     const email = this.forgotForm.get('email')?.value;
 
     this.authService.requestPasswordReset(email).subscribe({
-      next: (res: any) => {
-        this.message = "Si cet email existe, un lien a été envoyé.";
+      next: (response: any) => {
+        this.message = response;
         this.isLoading = false;
         this.forgotForm.reset();
       },
