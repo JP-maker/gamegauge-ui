@@ -37,11 +37,11 @@
     <ng-template #boardView>
       <!-- En-tête du tableau -->
       <div class="header">
+        <h1>{{ guestBoard?.name }}</h1>
         <!-- ============================================ -->
         <!-- VERSION ORDINATEUR (Caché sur petit écran)   -->
         <!-- ============================================ -->
         <div class="desktop-only">
-          <h1>{{ guestBoard?.name }}</h1>
           <span class="spacer"></span>
           <button mat-stroked-button (click)="openManageParticipantsDialog()">
             <mat-icon>groups</mat-icon>
