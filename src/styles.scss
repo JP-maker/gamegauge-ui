@@ -157,16 +157,9 @@ button[mat-raised-button] {
 .form-container {
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background-color: #f0f2f5; /* Couleur de fond légère */
-  padding: 20px;
-}
-
-.form-container mat-card {
-  max-width: 400px;
-  width: 100%;
-  padding: 20px;
+  padding-top: 40px;
+  border-radius: var(--border-radius);
+  box-shadow: var(--box-shadow);
 }
 
 mat-card-title {
