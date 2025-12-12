@@ -40,7 +40,7 @@
         <!-- ============================================ -->
         <!-- VERSION ORDINATEUR (Caché sur petit écran)   -->
         <!-- ============================================ -->
-        <div class="d-none d-md-flex gap-2">
+        <div class="desktop-only">
           <h1>{{ guestBoard?.name }}</h1>
           <span class="spacer"></span>
           <button mat-stroked-button (click)="openManageParticipantsDialog()">
@@ -59,8 +59,7 @@
         <!-- ============================================ -->
         <!-- VERSION MOBILE (Visible uniquement sur petit écran) -->
         <!-- ============================================ -->
-        <!-- d-md-none = caché à partir de la taille "Medium" (donc visible sur Small) -->
-        <div class="d-md-none">
+        <div class="mobile-only">
           
           <!-- Le petit bouton rond avec 3 points -->
           <button mat-icon-button [matMenuTriggerFor]="mobileMenu" aria-label="Options de la partie">

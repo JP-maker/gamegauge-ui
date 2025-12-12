@@ -146,3 +146,32 @@ th.mat-column-roundNumber, td.mat-column-roundNumber {
     display: flex;
     flex-direction: column;
 }
+
+/* On cache la version PC */
+.desktop-only {
+  display: none;
+}
+
+/* On affiche la version Mobile (alignée à droite) */
+.mobile-only {
+  display: block;
+  text-align: right;
+}
+
+/* --- Pour les écrans plus larges (Tablettes et PC) --- */
+/* Dès que l'écran dépasse 768px de large */
+@media (min-width: 768px) {
+  
+  /* On affiche la version PC (en ligne avec espacement) */
+  .desktop-only {
+    display: flex;
+    gap: 10px; /* Espace entre les boutons */
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  /* On cache la version Mobile */
+  .mobile-only {
+    display: none;
+  }
+}
