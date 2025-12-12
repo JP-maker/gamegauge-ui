@@ -70,4 +70,22 @@ export class AuthService {
     // Redirige l'utilisateur vers la page de connexion.
     this.router.navigate(['/login']);
   }
+
+  /**
+   * Envoie une requête de réinitialisation de mot de passe.
+   * @param email L'adresse email de l'utilisateur.
+   */
+  requestPasswordReset(email: string) {
+    // Le backend attend un objet JSON, pas juste une string brute
+    return this.http.post(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  /**
+   * Envoie une requête pour réinitialiser le mot de passe.
+   * @param token Le token de réinitialisation reçu par email.
+   * @param newPassword Le nouveau mot de passe choisi par l'utilisateur.
+   */
+  resetPassword(token: string, newPassword: string) {
+    return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
+  }
 }

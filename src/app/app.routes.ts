@@ -6,6 +6,8 @@ import { publicGuard } from './guards/public.guard';
 import { BoardListComponent } from './pages/boards/board-list/board-list.component';
 import { BoardDetailComponent } from './pages/boards/board-detail/board-detail.component';
 import { LandingComponent } from './pages/landing/landing.component';
+import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
 
 export const routes: Routes = [
   // --- ROUTES PUBLIQUES (protégées par publicGuard) ---
@@ -36,6 +38,9 @@ export const routes: Routes = [
     component: BoardDetailComponent,
     canActivate: [authGuard] 
   },
+
+  { path: 'forgot-password', component: ForgotPasswordComponent, title: 'Mot de passe oublié - GameGauge' },
+  { path: 'reset-password', component: ResetPasswordComponent, title: 'Réinitialisation - GameGauge' },
   
   // --- REDIRECTION ---
   // Rediriger toute route inconnue vers la page d'accueil par défaut
