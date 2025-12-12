@@ -1,38 +1,57 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms'; 
 import { CommonModule } from '@angular/common';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+
+// Imports Material
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule,FormsModule],
-  templateUrl: './forgot-password.component.html',
-  styleUrl: './forgot-password.component.scss'
+  imports: [
+    CommonModule, ReactiveFormsModule, RouterLink,
+    MatCardModule, MatInputModule, MatButtonModule, MatFormFieldModule, MatProgressSpinnerModule
+  ],
+  templateUrl: './forgot-password.component.html'
 })
 export class ForgotPasswordComponent {
-  email: string = '';
-  message: string = '';
-  error: string = '';
-  isLoading: boolean = false;
+  forgotForm: FormGroup;
+  isLoading = false;
+  message = '';
+  error = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private fb: FormBuilder,
+    private authService: AuthService
+  ) {
+    this.forgotForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]]
+    });
+  }
 
   onSubmit() {
-    if (!this.email) return;
+    if (this.forgotForm.invalid) return;
 
     this.isLoading = true;
     this.message = '';
     this.error = '';
 
-    this.authService.requestPasswordReset(this.email).subscribe({
-      next: (response: any) => {
-        // Affiche le message de succès (ex: "Si l'email existe...")
-        this.message = typeof response === 'string' ? response : response.message || 'Lien envoyé !';
+    const email = this.forgotForm.get('email')?.value;
+
+    this.authService.requestPasswordReset(email).subscribe({
+      next: (res: any) => {
+        this.message = "Si cet email existe, un lien a été envoyé.";
         this.isLoading = false;
+        this.forgotForm.reset();
       },
       error: (err) => {
-        this.error = "Une erreur est survenue. Vérifiez l'email.";
+        this.error = "Une erreur est survenue.";
         this.isLoading = false;
       }
     });
