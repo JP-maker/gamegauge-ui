@@ -63,7 +63,7 @@
 
     <!-- Boucle sur chaque participant du tableau -->
     <mat-card *ngFor="let participant of sortedParticipants; let i = index" class="participant-card">
-      
+      <p>Appuyer sur le score pour le modifier</p>
       <!-- Conteneur principal utilisant Flexbox pour la mise en page -->
       <div class="card-layout">
 
@@ -94,11 +94,12 @@
           </div>
         </div>
 
-        <!-- SECTION DE DROITE : Score et Bouton d'Action -->
+        <!-- SECTION DE DROITE : Score et Bouton d'Action
+         Bloquer le score si la partie est finie : [disabled]="gameStatus?.isGameOver"
+          -->
         <div class="score-action-section">
           <button mat-flat-button color="primary" class="score-button"
                   (click)="addScore.emit(participant)"
-                  [disabled]="gameStatus?.isGameOver"
                   [attr.aria-label]="'Ajouter un score pour ' + participant.name">
             <div class="score-display">
               <span class="score-value">{{ getParticipantTotalScore(participant) }}</span>
