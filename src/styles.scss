@@ -173,3 +173,9 @@ button mat-progress-spinner {
   vertical-align: middle;
   margin-right: 8px;
 }
+
+/* Cache le badge flottant Google reCAPTCHA */
+.grecaptcha-badge {
+    visibility: hidden;
+    opacity: 0;
+}
