@@ -1,8 +1,11 @@
 # Étape 1 : Build Angular
-FROM node:18-alpine AS build
+# Node 22 (LTS) : Node 18 est en fin de vie, et c'est la version
+# utilisée par la CI, donc l'image build exactement comme les tests.
+FROM node:22-alpine AS build
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+# npm ci : installation reproductible à partir du package-lock.json
+RUN npm ci
 COPY . .
 RUN npm run build -- --configuration production
 

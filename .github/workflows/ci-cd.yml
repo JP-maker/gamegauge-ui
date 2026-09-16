@@ -7,7 +7,9 @@ on:
     branches: [main]
 
 env:
-  IMAGE_NAME: ghcr.io/${{ github.repository }}
+  # Nom en minuscules : les registres Docker refusent les majuscules,
+  # or le compte GitHub s'écrit "JP-maker".
+  IMAGE_NAME: ghcr.io/jp-maker/gamegauge-ui
 
 jobs:
   # ---------------------------------------------------------------
