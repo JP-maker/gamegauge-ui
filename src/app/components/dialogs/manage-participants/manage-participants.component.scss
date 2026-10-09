@@ -1,28 +1,47 @@
+/* =============================================================================
+   src/app/components/dialogs/manage-participants/manage-participants.component.scss
+   ============================================================================= */
+
+@use '../../../../styles/variables' as v;
+
 .add-form {
   display: flex;
   gap: 8px;
   align-items: flex-start;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
 
   mat-form-field {
     flex-grow: 1;
   }
 }
 
-mat-mdc-dialog-container {
-  color: var(--surface-color) !important;
-}
-
 mat-dialog-content {
   min-height: 200px;
-  padding-top: 10 !important; // Surcharge pour un meilleur alignement
 }
 
-// Style pour chaque élément de la liste
-mat-list-item {
-  // Cible le sous-titre (le score)
-  .mat-mdc-list-item-line {
-    // Utiliser la couleur de texte secondaire
-    color: var(--text-secondary-color);
-  }
+/* La pastille reprend la couleur que le joueur portera dans le classement :
+   on voit en ajoutant un participant quelle couleur lui est attribuée. */
+.participant {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pastille {
+  flex: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  display: inline-grid;
+  place-items: center;
+  font-family: v.$font-display;
+  font-weight: 800;
+  font-size: 11px;
+  background: var(--player-bg);
+  color: var(--player-ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25);
+}
+
+mat-list-item .mat-mdc-list-item-line {
+  color: var(--ink-dim);
 }

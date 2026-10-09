@@ -14,6 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Participant } from '../../../models/board.model';
 import { BoardService } from '../../../services/board.service';
 import { NotificationService } from '../../../services/notification.service';
+import { playerColorClass, playerInitials } from '../../../utils/player-color.utils';
 
 @Component({
   selector: 'app-manage-participants',
@@ -52,6 +53,20 @@ export class ManageParticipantsComponent {
   constructor(@Inject(MAT_DIALOG_DATA) public data: { boardId: number, participants: Participant[] }) {
     this.participants = [...this.data.participants]; // Copie pour éviter la mutation directe
     this.isLocalMode = this.data.boardId === 0;
+  }
+
+  /**
+   * Couleur de jeton du joueur, d'après sa position dans la partie — la même
+   * règle que le classement, donc le dialogue montre bien la couleur que le
+   * joueur portera à l'écran.
+   */
+  colorOf(index: number): string {
+    return playerColorClass(index);
+  }
+
+  /** Initiales inscrites dans la pastille. */
+  initialsOf(participant: Participant): string {
+    return playerInitials(participant.name);
   }
 
   onAddParticipant(): void {

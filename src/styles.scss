@@ -229,7 +229,38 @@ mat-form-field {
 .form-container {
   display: flex;
   justify-content: center;
-  padding: 32px 16px 48px;
+  padding: 24px 16px 48px;
+
+  // La carte de formulaire, commune à la connexion, l'inscription et les deux
+  // écrans de mot de passe.
+  .mat-mdc-card {
+    width: 100%;
+    max-width: 420px;
+    padding: 10px 10px 6px;
+    border: 1px solid var(--line);
+    border-radius: v.$radius-lg;
+    background: var(--panel);
+    box-shadow: none;
+  }
+
+  mat-form-field {
+    margin-bottom: 4px;
+  }
+
+  mat-card-actions {
+    justify-content: center;
+    padding: 4px 16px 12px;
+
+    p {
+      margin: 0;
+      color: var(--ink-dim);
+      font-size: 14px;
+    }
+  }
+}
+
+mat-hint {
+  color: var(--ink-dim);
 }
 
 mat-card-title {
@@ -277,6 +308,18 @@ button[mat-flat-button] {
   --mdc-icon-button-icon-color: var(--ink);
 }
 
+// État désactivé : un bouton grisé doit rester lisible. Les valeurs par défaut
+// de Material le font presque disparaître sur le feutre.
+.mat-mdc-raised-button:disabled,
+.mat-mdc-unelevated-button:disabled {
+  --mdc-protected-button-disabled-container-color: var(--panel-2);
+  --mdc-protected-button-disabled-label-text-color: var(--ink-dim);
+  --mdc-filled-button-disabled-container-color: var(--panel-2);
+  --mdc-filled-button-disabled-label-text-color: var(--ink-dim);
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+
 .error-message {
   color: var(--err-ink);
   background: var(--err-bg);
@@ -309,12 +352,89 @@ button mat-progress-spinner {
 }
 
 // =============================================================================
-//  7. DIVERS
+//  7. DIALOGUES
 // =============================================================================
 mat-dialog-content {
   padding-top: 10px;
 }
 
+h2[mat-dialog-title],
+.mat-mdc-dialog-title {
+  font-family: v.$font-display;
+  font-weight: 800;
+  font-size: 21px;
+  letter-spacing: -.01em;
+  color: var(--ink);
+}
+
+.mat-mdc-dialog-actions {
+  padding: 8px 20px 16px;
+  gap: 8px;
+}
+
+// =============================================================================
+//  8. CLASSES UTILITAIRES
+//  Les gabarits de connexion, d'inscription et de mot de passe emploient des
+//  noms venus de Bootstrap — .alert, .w-100, .text-end… — alors que Bootstrap
+//  n'est pas une dépendance du projet : ces classes ne produisaient donc aucun
+//  effet. On les définit ici, aux couleurs du thème, plutôt que de réécrire
+//  quatre gabarits.
+// =============================================================================
+.alert {
+  display: block;
+  padding: 10px 14px;
+  border-radius: v.$radius-sm;
+  font-size: 14px;
+  text-align: center;
+}
+
+.alert-danger {
+  background: var(--err-bg);
+  color: var(--err-ink);
+}
+
+.alert-success {
+  background: var(--ok-bg);
+  color: var(--ok-ink);
+}
+
+.w-100 { width: 100%; }
+.mb-3 { margin-bottom: 16px; }
+.mt-2 { margin-top: 8px; }
+.mt-3 { margin-top: 16px; }
+.p-2 { padding: 8px; }
+.py-4 { padding-block: 24px; }
+
+.text-center { text-align: center; }
+.text-end { text-align: right; }
+.text-decoration-none { text-decoration: none; }
+.justify-content-center { display: flex; justify-content: center; }
+
+.text-muted,
+.text-secondary {
+  color: var(--ink-dim);
+}
+
+.small {
+  font-size: 13px;
+}
+
+// Mention légale reCAPTCHA : discrète, mais ses liens restent identifiables.
+.text-muted a,
+.text-secondary a {
+  color: var(--ink-dim);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  font-weight: 500;
+
+  &:hover {
+    color: var(--brass);
+  }
+}
+
+// =============================================================================
+//  9. DIVERS
+// =============================================================================
 // Le badge flottant de Google reCAPTCHA reste masqué : la mention légale est
 // portée par le texte des formulaires.
 .grecaptcha-badge {
