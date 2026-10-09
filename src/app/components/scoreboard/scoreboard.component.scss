@@ -22,6 +22,58 @@
   margin: 0 0 12px;
 }
 
+/* --- Saisie d'une manche ------------------------------------------------
+   Le bouton principal de l'écran : pleine largeur, en laiton, avec le même
+   relief que les jetons pour qu'ils se lisent comme une même famille.
+   ----------------------------------------------------------------------- */
+.round-action {
+  margin: 10px 0 14px;
+}
+
+.round-button {
+  width: 100%;
+  min-height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: v.$radius;
+  cursor: pointer;
+  font-family: v.$font-display;
+  font-weight: 600;
+  font-size: 17px;
+  background: var(--brass);
+  color: var(--brass-ink);
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .18);
+  transition: transform .12s ease;
+
+  mat-icon {
+    color: currentColor;
+  }
+
+  &:hover {
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(1px);
+    box-shadow: inset 0 2px 0 rgba(0, 0, 0, .18);
+  }
+
+  &:focus-visible {
+    outline: 3px solid var(--ink);
+    outline-offset: 2px;
+  }
+}
+
+.round-action .hint {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 13px;
+}
+
 /* --- Règles de la partie ---------------------------------------------- */
 .rules {
   display: flex;
@@ -305,7 +357,8 @@ table.rounds {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .token {
+  .token,
+  .round-button {
     transition: none;
 
     &:hover,

@@ -10,13 +10,14 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { ManageParticipantsComponent } from '../../components/dialogs/manage-participants/manage-participants.component';
 import { AddScoreComponent } from '../../components/dialogs/add-score/add-score.component';
+import { AddRoundComponent, RoundResult } from '../../components/dialogs/add-round/add-round.component';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import { ScoreEntryResponse } from '../../models/score-entry.model';
 import { ConfirmComponent } from '../../components/dialogs/confirm/confirm.component';
 import { CreateBoardComponent } from '../../components/dialogs/create-board/create-board.component';
 import { ScoreboardComponent } from '../../components/scoreboard/scoreboard.component';
-import { GameStatus, calculateGameStatus } from '../../utils/game-status.utils';
+import { GameStatus, calculateGameStatus, nextRoundNumber } from '../../utils/game-status.utils';
 import { NotificationService } from '../../services/notification.service';
 
 @Component({
@@ -116,6 +117,57 @@ export class LandingComponent implements OnInit {
         this.guestBoard!.participants = updatedParticipants;
         this.saveState(); // Sauvegarde et met à jour la vue
       }
+    });
+  }
+
+  /**
+   * Saisie d'une manche entière : un champ par joueur dans une seule fenêtre.
+   * Le tableau invité vit dans le localStorage, la mise à jour est donc locale.
+   */
+  openAddRoundDialog(): void {
+    if (!this.guestBoard?.participants?.length) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(AddRoundComponent, {
+      width: '440px',
+      data: {
+        participants: this.guestBoard.participants,
+        nextRoundNumber: nextRoundNumber(this.guestBoard)
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: RoundResult | undefined) => {
+      if (!result || !this.guestBoard) {
+        return;
+      }
+
+      result.scores.forEach(entry => {
+        const participant = this.guestBoard!.participants
+          .find(p => p.id === entry.participantId);
+
+        if (!participant) {
+          return;
+        }
+
+        const existing = (participant.scores || [])
+          .find(s => s.roundNumber === result.roundNumber);
+
+        if (existing) {
+          existing.scoreValue = entry.scoreValue;
+        } else {
+          participant.scores.push({
+            // Identifiant local : il n'a de sens que dans ce navigateur, le
+            // serveur réattribuera les siens à l'import.
+            id: Date.now() + entry.participantId,
+            scoreValue: entry.scoreValue,
+            roundNumber: result.roundNumber
+          } as ScoreEntryResponse);
+        }
+      });
+
+      this.saveState();
+      this.notificationService.showSuccess(`Manche ${result.roundNumber} enregistrée.`);
     });
   }
 

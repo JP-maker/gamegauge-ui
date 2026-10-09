@@ -8,7 +8,7 @@ import { RoundData } from '../../models/round.model';
 import { playerColorClass, playerInitials } from '../../utils/player-color.utils';
 
 // Imports pour les types
-import { GameStatus } from '../../utils/game-status.utils';
+import { GameStatus, nextRoundNumber } from '../../utils/game-status.utils';
 
 // Imports Material — le gabarit n'utilise plus que l'icône : le jeton est un
 // bouton natif, et l'historique une table HTML simple, bien plus facile à
@@ -56,6 +56,8 @@ export class ScoreboardComponent implements OnChanges {
   // Note: La gestion des participants est sur le header, donc cet Output n'est plus forcément nécessaire.
   // On le garde pour la flexibilité.
   @Output() manageParticipants = new EventEmitter<void>();
+  // Demande d'ouverture de la fenêtre de saisie d'une manche entière.
+  @Output() addRound = new EventEmitter<void>();
 
   // --- PROPRIÉTÉS INTERNES pour l'affichage ---
   sortedParticipants: Participant[] = [];
@@ -70,6 +72,11 @@ export class ScoreboardComponent implements OnChanges {
    * couleur d'un joueur ne bouge : elle suit le joueur, jamais son rang.
    */
   private colorByParticipant = new Map<number, string>();
+
+  /** Numéro de la manche que proposera la fenêtre de saisie. */
+  get nextRound(): number {
+    return nextRoundNumber(this.board);
+  }
 
   /** Classe CSS portant la couleur du joueur. */
   colorOf(participant: Participant): string {

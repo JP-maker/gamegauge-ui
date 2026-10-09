@@ -3,12 +3,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, forkJoin, of } from 'rxjs';
 import { map, switchMap, catchError } from 'rxjs/operators';
 
 // Modèles et Utilitaires
 import { Board, Participant } from '../../../models/board.model';
-import { GameStatus, calculateGameStatus } from '../../../utils/game-status.utils';
+import { GameStatus, calculateGameStatus, nextRoundNumber } from '../../../utils/game-status.utils';
 
 // Services
 import { BoardService } from '../../../services/board.service';
@@ -17,6 +17,7 @@ import { NotificationService } from '../../../services/notification.service';
 // Composants de dialogue
 import { ManageParticipantsComponent } from '../../../components/dialogs/manage-participants/manage-participants.component';
 import { AddScoreComponent } from '../../../components/dialogs/add-score/add-score.component';
+import { AddRoundComponent, RoundResult } from '../../../components/dialogs/add-round/add-round.component';
 import { ConfirmComponent } from '../../../components/dialogs/confirm/confirm.component';
 
 // Composant réutilisable
@@ -120,6 +121,51 @@ export class BoardDetailComponent implements OnInit {
         this.notificationService.showSuccess('Liste des participants mise à jour.');
         this.refreshData();
       }
+    });
+  }
+
+  /**
+   * Saisie d'une manche entière. L'API n'expose pas d'enregistrement groupé :
+   * on envoie un appel par joueur et on attend qu'ils aboutissent tous avant
+   * de rafraîchir, plutôt que de recharger le tableau après chacun.
+   */
+  openAddRoundDialog(board: Board): void {
+    if (!board.participants?.length) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(AddRoundComponent, {
+      width: '440px',
+      data: {
+        participants: board.participants,
+        nextRoundNumber: nextRoundNumber(board)
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: RoundResult | undefined) => {
+      if (!result) {
+        return;
+      }
+
+      const calls = result.scores.map(entry =>
+        this.boardService.setScore(board.id, entry.participantId, {
+          scoreValue: entry.scoreValue,
+          roundNumber: result.roundNumber
+        })
+      );
+
+      forkJoin(calls).subscribe({
+        next: () => {
+          this.notificationService.showSuccess(`Manche ${result.roundNumber} enregistrée.`);
+          this.refreshData();
+        },
+        error: () => {
+          // Un appel a pu passer et un autre échouer : on recharge pour
+          // montrer l'état réel plutôt que de laisser un affichage faux.
+          this.notificationService.showError("Une partie des scores n'a pas pu être enregistrée.");
+          this.refreshData();
+        }
+      });
     });
   }
 

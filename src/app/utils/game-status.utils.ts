@@ -2,6 +2,29 @@
 
 import { Board, Participant } from "../models/board.model";
 
+/**
+ * Numéro de la prochaine manche à saisir.
+ *
+ * On prend le plus grand numéro de manche déjà enregistré, toutes personnes
+ * confondues, et on ajoute un. Compter les scores d'un seul joueur — ce que
+ * faisait l'ancien calcul — se trompe dès qu'un joueur a sauté une manche :
+ * il proposait alors de ressaisir une manche déjà jouée.
+ */
+export function nextRoundNumber(board: Board | null): number {
+  if (!board?.participants?.length) {
+    return 1;
+  }
+
+  const lastRound = board.participants.reduce((max, participant) => {
+    const participantMax = (participant.scores || [])
+      .reduce((m, score) => Math.max(m, score.roundNumber ?? 0), 0);
+
+    return Math.max(max, participantMax);
+  }, 0);
+
+  return lastRound + 1;
+}
+
 // 1. Définir et exporter l'interface pour le statut du jeu
 export interface GameStatus {
   isGameOver: boolean;

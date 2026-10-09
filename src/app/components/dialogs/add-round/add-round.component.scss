@@ -1,0 +1,88 @@
+/* =============================================================================
+   src/app/components/dialogs/add-round/add-round.component.scss
+   Saisie d'une manche : une ligne par joueur.
+   ============================================================================= */
+
+@use '../../../../styles/variables' as v;
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.round-field {
+  max-width: 150px;
+  margin-top: 4px;
+}
+
+.help {
+  margin: 0 0 14px;
+  font-size: 13px;
+  color: var(--ink-dim);
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 30px 1fr 112px;
+  align-items: center;
+  gap: 10px;
+}
+
+/* La pastille reprend la couleur du jeton : on retrouve son joueur dans la
+   fenêtre comme dans le classement. */
+.pastille {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: v.$font-display;
+  font-weight: 800;
+  font-size: 12px;
+  background: var(--player-bg);
+  color: var(--player-ink);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25);
+  margin-bottom: 18px;
+}
+
+.row__name {
+  font-family: v.$font-display;
+  font-weight: 600;
+  font-size: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 18px;
+}
+
+.row__field {
+  width: 112px;
+}
+
+/* Sous 380 px, le nom passe au-dessus du champ plutôt que de se faire
+   tronquer. */
+@media (max-width: 379px) {
+  .row {
+    grid-template-columns: 30px 1fr;
+  }
+
+  .row__field {
+    grid-column: 2;
+    width: 100%;
+  }
+
+  .row__name {
+    margin-bottom: 2px;
+  }
+
+  .pastille {
+    margin-bottom: 0;
+    align-self: start;
+    margin-top: 2px;
+  }
+}

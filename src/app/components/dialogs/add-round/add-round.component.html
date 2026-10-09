@@ -1,0 +1,46 @@
+<h2 mat-dialog-title>Saisir une manche</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="roundForm" id="addRoundForm" (ngSubmit)="onSave()">
+
+    <mat-form-field appearance="outline" class="round-field">
+      <mat-label>Manche n°</mat-label>
+      <input matInput formControlName="roundNumber" type="number" min="1" inputmode="numeric">
+    </mat-form-field>
+
+    <p class="help">
+      Les points de cette manche, pas le total. Un champ laissé vide ou à zéro
+      compte pour zéro.
+    </p>
+
+    <div class="rows" formArrayName="scores">
+      <div class="row"
+           *ngFor="let control of scores.controls; let i = index"
+           [formGroupName]="i">
+
+        <span class="pastille" [ngClass]="colorOf(i)" aria-hidden="true">{{ initialsOf(i) }}</span>
+
+        <label class="row__name" [attr.for]="'score-' + i">{{ participantAt(i).name }}</label>
+
+        <mat-form-field appearance="outline" class="row__field">
+          <mat-label>Points</mat-label>
+          <input matInput
+                 [id]="'score-' + i"
+                 formControlName="scoreValue"
+                 type="number"
+                 inputmode="numeric"
+                 [attr.autofocus]="i === 0 ? '' : null">
+        </mat-form-field>
+      </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button type="button" (click)="onCancel()">Annuler</button>
+  <button mat-flat-button color="primary" type="submit" form="addRoundForm"
+          [disabled]="roundForm.invalid">
+    Enregistrer la manche
+  </button>
+</mat-dialog-actions>

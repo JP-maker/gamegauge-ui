@@ -50,9 +50,20 @@
        inutile la phrase « appuyer sur le score pour le modifier ».
        ======================================================================= -->
   <h2 class="board-h2">Classement</h2>
-  <p class="hint" *ngIf="sortedParticipants.length > 0">
-    Touchez un jeton pour ajouter les points de la manche.
-  </p>
+
+  <!-- Action principale : saisir toute la manche d'un coup, ce qui correspond
+       au geste réel autour d'une table. Le jeton reste là pour corriger le
+       score d'un seul joueur. -->
+  <div class="round-action" *ngIf="board.participants && board.participants.length > 0">
+    <button type="button"
+            class="round-button"
+            (click)="addRound.emit()"
+            [attr.aria-label]="'Saisir les scores de la manche ' + nextRound">
+      <mat-icon aria-hidden="true">playlist_add</mat-icon>
+      <span>Saisir la manche {{ nextRound }}</span>
+    </button>
+    <p class="hint">Ou touchez un jeton pour corriger un joueur seul.</p>
+  </div>
 
   <div class="players">
     <div class="player"
