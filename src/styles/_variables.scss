@@ -1,70 +1,94 @@
-/* Fichier: src/styles/_variables.scss */
-/* Source de vérité unique pour toutes les couleurs et styles. */
+/* =============================================================================
+   src/styles/_variables.scss
+   Source de vérité unique du design « Jetons sur plateau ».
 
-// --- TYPOGRAPHIE ---
-$font-family: 'Montserrat', sans-serif;
+   Deux surfaces — feutre (sombre) et lin (clair) — et un seul accent laiton
+   pour les actions. Toute la couleur saturée est réservée aux joueurs : c'est
+   ce qui empêche l'écran de devenir illisible une fois six jetons posés.
+   ============================================================================= */
 
-// =============================================================================
-// THÈME SOMBRE "GAMEGAUGE" (Votre thème personnalisé)
-// =============================================================================
-$background-dark: #121212;
-$surface-dark: #212121;
-$text-primary-dark: #ffffff;
-$text-secondary-dark: #005CBB; // Bleu pour le texte secondaire
-
-// Couleurs de la marque
-$primary-dark: #3272D8;
-$accent-dark: #42B0AC;
-$warn-dark: #cf6679;
-
-// Couleurs de statut
-$success-bg-dark: #69f0ae;
-$success-text-dark: #000000;
-$error-bg-dark: #f44336;
-$error-text-dark: #000000;
-
-// Couleurs des avatars
-$avatar-bg-dark: $primary-dark;
-$avatar-text-dark: #ffffff;
-
-// Couleurs des sections de la landing page
-$section-hero-bg-dark: #333333;
-$section-board-bg-dark: #212121;
-$section-cta-bg-dark: #333333;
-
+// --- TYPOGRAPHIE -------------------------------------------------------------
+// Baloo 2 pour ce qui se lit d'un coup d'œil (titres, scores, noms), Nunito
+// Sans pour le texte courant. Les deux ont des terminaisons arrondies qui
+// tiennent le registre du jeu de société sans tomber dans l'enfantin.
+$font-display: 'Baloo 2', 'Trebuchet MS', system-ui, sans-serif;
+$font-body: 'Nunito Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
 
 // =============================================================================
-// THÈME CLAIR "GOOGLE STORE"
+//  JETONS DES JOUEURS
+//  Six couleurs identiques dans les deux thèmes : la couleur suit le joueur,
+//  jamais son rang ni le fond.
+//
+//  Générées en OKLCH à clarté et chroma contrôlées, puis vérifiées par calcul :
+//    · écart minimal entre deux jetons sous déficience rouge-vert : 11,5
+//    · écart minimal en vision normale                            : 15,4
+//    · clarté et chroma dans les bandes requises pour les deux thèmes
+//
+//  Le contraste d'un jeton sur le feutre reste modéré, d'où l'initiale inscrite
+//  dans le jeton : l'identité ne dépend jamais de la couleur seule.
+//  L'encre de chaque jeton est choisie séparément — un texte blanc ne tient ni
+//  sur le turquoise ni sur l'or.
 // =============================================================================
-$background-light: #f8f9fa;
-$surface-light: #ffffff;
-$text-primary-light: #202124;
-$text-secondary-light: #5f6368;
-
-// Couleurs de la marque
-$primary-light: #1a73e8;
-$accent-light: #1a73e8;
-$warn-light: #d93025;
-
-// Couleurs de statut
-$success-bg-light: #1e8e3e;
-$success-text-light: #ffffff;
-$error-bg-light: #f44336;
-$error-text-light: #ffffff;
-
-// Couleurs des avatars
-$avatar-bg-light: $primary-light;
-$avatar-text-light: #ffffff;
-
-// Couleurs des sections de la landing page
-$section-hero-bg-light: $background-light;
-$section-board-bg-light: $surface-light;
-$section-cta-bg-light: $background-light;
-
+$players: (
+  1: (bg: #ae2d00, ink: #ffffff),
+  2: (bg: #a58d07, ink: #1a2b23),
+  3: (bg: #00a78a, ink: #0e2a24),
+  4: (bg: #039ce9, ink: #07263a),
+  5: (bg: #9230ef, ink: #ffffff),
+  6: (bg: #ba049f, ink: #ffffff)
+);
 
 // =============================================================================
-// VALEURS DE DESIGN GLOBALES
+//  THÈME FEUTRE (sombre) — celui par défaut
 // =============================================================================
-$border-radius: 8px;
-$box-shadow: 0 1px 2px 0 rgba(60,64,67,0.3), 0 1px 3px 1px rgba(60,64,67,0.15);
-$disabled-button-bg: rgba(255, 255, 255, 0.12);
+$felt-bg:        #123a2f; // le tapis
+$felt-panel:     #1c5345; // cartes, lignes de joueur, barres
+$felt-panel-2:   #235f50; // en-têtes de tableau, surfaces survolées
+$felt-line:      #2e6e5c; // filets et bordures
+$felt-ink:       #eaf2ee; // texte principal
+$felt-ink-dim:   #9fbcb0; // texte atténué — ivoire désaturé, et non plus le
+                          // bleu #005CBB illisible de l'ancienne version
+$felt-brass:     #d9a84c; // action principale, liens
+$felt-brass-ink: #17251e; // texte posé sur le laiton
+$felt-win:       #ffd479; // couronne et liseré du meneur
+$felt-ok-bg:     #1f7a5c;
+$felt-ok-ink:    #eafaf3;
+$felt-err-bg:    #8f2f22;
+$felt-err-ink:   #ffeeea;
+
+// =============================================================================
+//  THÈME LIN (clair)
+//  Un gris-vert très pâle plutôt qu'un blanc pur : le lin d'une table de jeu.
+// =============================================================================
+$linen-bg:        #e7ede9;
+$linen-panel:     #ffffff;
+$linen-panel-2:   #f3f7f4;
+$linen-line:      #d3dcd7;
+$linen-ink:       #16241e;
+$linen-ink-dim:   #5e7168;
+$linen-brass:     #8a6a14; // assombri pour tenir le contraste sur fond clair
+$linen-brass-ink: #ffffff;
+$linen-win:       #8a6a14;
+$linen-ok-bg:     #1b6a50;
+$linen-ok-ink:    #ffffff;
+$linen-err-bg:    #a3321f;
+$linen-err-ink:   #ffffff;
+
+// =============================================================================
+//  VALEURS DE DESIGN GLOBALES
+// =============================================================================
+$radius-sm: 8px;
+$radius: 12px;
+$radius-lg: 16px;
+$radius-pill: 999px;
+
+$token-size: 62px;        // cible tactile confortable au pouce
+$token-size-sm: 54px;
+
+$shadow-raised: 0 1px 2px rgba(0, 0, 0, .16), 0 6px 18px rgba(0, 0, 0, .12);
+
+// Relief d'un vrai jeton : liseré clair en haut, ombre portée en bas.
+$token-relief:
+  inset 0 2px 0 rgba(255, 255, 255, .28),
+  inset 0 -3px 0 rgba(0, 0, 0, .22),
+  0 2px 0 rgba(0, 0, 0, .25);

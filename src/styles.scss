@@ -1,119 +1,222 @@
-/* Fichier : src/styles.scss */
+/* =============================================================================
+   src/styles.scss
+   Feuille globale : thème Angular Material, jetons des joueurs, et le peu de
+   styles réellement globaux.
 
-// --- 1. IMPORTATIONS ---
-// Importer nos variables de design en premier pour qu'elles soient disponibles partout.
-@use 'styles/variables' as vars;
-// Importer le framework de theming d'Angular Material.
+   Plus aucun !important, plus aucune couleur écrite en dur : tout passe par
+   les variables de styles/_variables.scss.
+   ============================================================================= */
+
+@use 'sass:map';
 @use '@angular/material' as mat;
+@use 'styles/variables' as v;
 
-
-// --- 2. CONFIGURATION DE BASE D'ANGULAR MATERIAL ---
-// Inclure les styles fondamentaux (reset, typographie, etc.).
-// Ceci ne doit être fait qu'UNE SEULE FOIS dans toute l'application.
 @include mat.core();
 
+// =============================================================================
+//  1. THÈME ANGULAR MATERIAL
+//  Material 3. La palette verte est celle qui colle au feutre ; les teintes
+//  précises de la marque sont ensuite posées par variables CSS, ce qui évite
+//  d'avoir à forcer quoi que ce soit avec !important.
+// =============================================================================
+$gg-typography: (
+  brand-family: v.$font-display,
+  plain-family: v.$font-body,
+);
 
+$felt-theme: mat.define-theme((
+  color: (
+    theme-type: dark,
+    primary: mat.$green-palette,
+    tertiary: mat.$orange-palette,
+  ),
+  typography: $gg-typography,
+  density: (scale: 0),
+));
 
-// 4. TRADUIRE les variables Sass en variables CSS pour chaque thème
-.dark-theme {
-  --background-color: #{vars.$background-dark};
-  --surface-color: #{vars.$surface-dark};
-  --text-primary-color: #{vars.$text-primary-dark};
-  --text-secondary-color: #{vars.$text-secondary-dark};
-  --primary-color: #{vars.$primary-dark};
-  --accent-color: #{vars.$accent-dark};
-  --warn-color: #{vars.$warn-dark};
-  --success-bg-color: #{vars.$success-bg-dark};
-  --success-text-color: #{vars.$success-text-dark};
-  --error-bg-color: #{vars.$warn-dark}; // On peut réutiliser la variable warn
-  --error-text-color: #{vars.$success-text-dark};
-  --section-hero-bg: #{vars.$section-hero-bg-dark};
-  --section-board-bg: #{vars.$section-board-bg-dark};
-  --section-cta-bg: #{vars.$section-cta-bg-dark};
-  --avatar-bg-color: #{vars.$avatar-bg-dark};
-  --mdc-dialog-container-color: #{vars.$surface-dark};
-  --mdc-dialog-supporting-text-color: #{vars.$text-secondary-dark};
-  --mdc-dialog-subhead-color: #{vars.$text-primary-dark};
-  --mdc-outlined-text-field-input-text-color : #{vars.$text-primary-dark};
-  --mdc-list-list-item-label-text-color: #{vars.$text-primary-dark};
-  --mdc-elevated-card-container-color: #{vars.$surface-dark};
-  --mat-icon-color: #{vars.$text-primary-dark};
+$linen-theme: mat.define-theme((
+  color: (
+    theme-type: light,
+    primary: mat.$green-palette,
+    tertiary: mat.$orange-palette,
+  ),
+  typography: $gg-typography,
+  density: (scale: 0),
+));
+
+// La typographie et la densité ne sont émises qu'une fois, avec le thème par
+// défaut. Le thème clair ne redéfinit que les couleurs.
+html {
+  @include mat.all-component-themes($felt-theme);
 }
 
 .light-theme {
-  --background-color: #{vars.$background-light};
-  --surface-color: #{vars.$surface-light};
-  --text-primary-color: #{vars.$text-primary-light};
-  --text-secondary-color: #{vars.$text-secondary-light};
-  --primary-color: #{vars.$primary-light};
-  --accent-color: #{vars.$accent-light};
-  --warn-color: #{vars.$warn-light};
-  --avatar-bg-color: #{vars.$avatar-bg-light};
-  --avatar-text-color: #{vars.$avatar-text-light};
-  --success-bg-color: #{vars.$success-bg-light};
-  --success-text-color: #{vars.$success-text-light};
-  --error-bg-color: #{vars.$warn-light};
-  --error-text-color: #{vars.$success-text-light};
-  --section-hero-bg: #{#{vars.$section-hero-bg-light}};
-  --section-board-bg: #{vars.$section-board-bg-light};
-  --section-cta-bg: #{vars.$section-cta-bg-light};
-  --avatar-bg-color: #{vars.$avatar-bg-light};
-  --mdc-dialog-container-color: #{vars.$surface-light};
-  --mdc-dialog-supporting-text-color: #{vars.$text-secondary-light};
-  --mdc-dialog-subhead-color: #{vars.$text-primary-light};
-  --mdc-outlined-text-field-input-text-color : #{vars.$text-primary-light};
-  --mdc-list-list-item-label-text-color: #{vars.$text-primary-light};
-  --mdc-elevated-card-container-color: #{vars.$surface-light};
-  --mat-icon-color: #{vars.$text-primary-light};
+  @include mat.all-component-colors($linen-theme);
 }
 
-
-// --- 5. STYLES GLOBAUX utilisant les variables CSS ---
-html, body { height: 100%; }
-body {
-  margin: 0;
-  font-family: vars.$font-family; 
-  background-color: var(--background-color);
-  color: var(--text-primary-color);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-a {
-  color: var(--accent-color);
-}
-
-.mat-mdc-raised-button[color] {
-  // Forcer la couleur du texte à l'intérieur du bouton
-  background-color: var(--primary-color) !important;
-  .mdc-button__label {
-    color: var(--text-primary-color) !important;
+// =============================================================================
+//  2. JETONS DES JOUEURS
+//  Une classe par couleur, posée par le composant : .player-1 … .player-6.
+//  Elles vivent hors des thèmes, puisque la couleur d'un joueur ne change pas
+//  quand on bascule le feutre en lin.
+// =============================================================================
+@each $i, $c in v.$players {
+  .player-#{$i} {
+    --player-bg: #{map.get($c, bg)};
+    --player-ink: #{map.get($c, ink)};
   }
 }
 
-mat-card-title {
-  color: var(--text-primary-color);
-  font-size: 24px;
-  font-weight: 500;
-  padding-bottom: 8px;
+// =============================================================================
+//  3. VARIABLES DE THÈME
+//  Les noms historiques (--surface-color, --text-primary-color…) sont conservés
+//  pour que les composants non repris continuent de fonctionner.
+// =============================================================================
+.dark-theme {
+  --bg: #{v.$felt-bg};
+  --panel: #{v.$felt-panel};
+  --panel-2: #{v.$felt-panel-2};
+  --line: #{v.$felt-line};
+  --ink: #{v.$felt-ink};
+  --ink-dim: #{v.$felt-ink-dim};
+  --brass: #{v.$felt-brass};
+  --brass-ink: #{v.$felt-brass-ink};
+  --win: #{v.$felt-win};
+  --ok-bg: #{v.$felt-ok-bg};
+  --ok-ink: #{v.$felt-ok-ink};
+  --err-bg: #{v.$felt-err-bg};
+  --err-ink: #{v.$felt-err-ink};
+
+  // Tissage du feutre : deux trames croisées très discrètes, aucune image.
+  --weave:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, .016) 0 2px, transparent 2px 4px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, .05) 0 2px, transparent 2px 4px);
 }
 
-mat-card-actions {
-  color: antiquewhite;
+.light-theme {
+  --bg: #{v.$linen-bg};
+  --panel: #{v.$linen-panel};
+  --panel-2: #{v.$linen-panel-2};
+  --line: #{v.$linen-line};
+  --ink: #{v.$linen-ink};
+  --ink-dim: #{v.$linen-ink-dim};
+  --brass: #{v.$linen-brass};
+  --brass-ink: #{v.$linen-brass-ink};
+  --win: #{v.$linen-win};
+  --ok-bg: #{v.$linen-ok-bg};
+  --ok-ink: #{v.$linen-ok-ink};
+  --err-bg: #{v.$linen-err-bg};
+  --err-ink: #{v.$linen-err-ink};
+
+  --weave:
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, .013) 0 2px, transparent 2px 4px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, .013) 0 2px, transparent 2px 4px);
 }
 
-mat-card-actions a {
-  color: #90caf9; // Couleur primaire claire de Material
+// Alias des anciens noms, pour les composants pas encore repris.
+.dark-theme,
+.light-theme {
+  --background-color: var(--bg);
+  --surface-color: var(--panel);
+  --surface-highlight-color: var(--panel-2);
+  --text-primary-color: var(--ink);
+  --text-secondary-color: var(--ink-dim);
+  --primary-color: var(--brass);
+  --accent-color: var(--brass);
+  --warn-color: var(--err-bg);
+  --avatar-bg-color: var(--brass);
+  --avatar-text-color: var(--brass-ink);
+  --success-bg-color: var(--ok-bg);
+  --success-text-color: var(--ok-ink);
+  --error-bg-color: var(--err-bg);
+  --error-text-color: var(--err-ink);
+  --section-hero-bg: var(--bg);
+  --section-board-bg: var(--bg);
+  --section-cta-bg: var(--bg);
+  --border-radius: #{v.$radius};
+  --box-shadow: #{v.$shadow-raised};
+
+  // Quelques jetons Material pointés sur nos surfaces : c'est ce qui remplace
+  // les !important de l'ancienne feuille.
+  --mdc-dialog-container-color: var(--panel);
+  --mdc-dialog-subhead-color: var(--ink);
+  --mdc-dialog-supporting-text-color: var(--ink-dim);
+  --mdc-elevated-card-container-color: var(--panel);
+  --mdc-outlined-card-container-color: var(--panel);
+  --mdc-outlined-text-field-input-text-color: var(--ink);
+  --mdc-outlined-text-field-label-text-color: var(--ink-dim);
+  --mdc-outlined-text-field-outline-color: var(--line);
+  --mdc-list-list-item-label-text-color: var(--ink);
+  --mat-icon-color: var(--ink);
+  --mat-menu-container-color: var(--panel);
+  --mat-menu-item-label-text-color: var(--ink);
+  --mat-toolbar-container-background-color: var(--panel);
+  --mat-toolbar-container-text-color: var(--ink);
 }
 
-/* STYLES GLOBAUX POUR LES DIALOGUES MAT-DIALOG */
-mat-dialog-content {
-  padding-top: 10px !important;
+// =============================================================================
+//  4. BASE
+// =============================================================================
+html,
+body {
+  height: 100%;
 }
 
-[data-theme='dark-theme'] {
-  --mdc-dialog-container-color: #2a2a2a; /* Thème sombre */
-  --mdc-dialog-supporting-text-color: #f5f5f5;
+body {
+  margin: 0;
+  font-family: v.$font-body;
+  font-size: 16px;
+  line-height: 1.55;
+  background-color: var(--bg);
+  background-image: var(--weave);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .25s ease, color .25s ease;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  font-family: v.$font-display;
+  font-weight: 800;
+  letter-spacing: -.015em;
+  line-height: 1.12;
+  color: var(--ink);
+  text-wrap: balance;
+}
+
+h1 { font-size: clamp(26px, 5vw, 34px); margin: 0 0 6px; }
+h2 { font-size: clamp(20px, 3.5vw, 24px); font-weight: 600; margin: 28px 0 12px; }
+h3 { font-size: 18px; font-weight: 600; margin: 0 0 8px; }
+
+a {
+  color: var(--brass);
+  font-weight: 700;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+// Les chiffres s'alignent partout où ils se comparent.
+table,
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+// Libellé en petites capitales, posé au-dessus des sections.
+.eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  margin: 0 0 9px;
+}
+
+// =============================================================================
+//  5. FORMULAIRES ET BOUTONS
+// =============================================================================
 form {
   display: flex;
   flex-direction: column;
@@ -123,59 +226,98 @@ mat-form-field {
   width: 100%;
 }
 
-button[mat-raised-button] {
-  margin-top: 16px;
-  min-height: 48px;
-}
-
-.error-message {
-  color: var(--error-text-color);
-  text-align: center;
-  margin-bottom: 16px;
-}
-
-
-
-/* STYLES GLOBAUX POUR LES NOTIFICATIONS SNACKBAR */
-
-// Style pour les notifications de succès
-.snackbar-success {
-  // Appliquer les couleurs de la palette "accent" de notre thème
-  --mdc-snackbar-container-color: var(--success-bg-color);
-  --mat-mdc-snack-bar-button-color: var(--success-text-color);
-  --mdc-snackbar-supporting-text-color: var(--success-text-color);
-}
-
-// Style pour les notifications d'erreur
-.snackbar-error {
-  // Appliquer les couleurs de la palette "warn" (rouge) de notre thème
-  --mdc-snackbar-container-color: var(--error-bg-color);
-  --mat-mdc-snack-bar-button-color: var(--error-text-color);
-  --mdc-snackbar-supporting-text-color: var(--error-text-color);
-}
-
 .form-container {
   display: flex;
   justify-content: center;
-  padding-top: 40px;
-  border-radius: var(--border-radius);
-  box-shadow: var(--box-shadow);
+  padding: 32px 16px 48px;
 }
 
 mat-card-title {
-  margin-bottom: 20px !important;
-  text-align: center;
+  font-family: v.$font-display;
+  font-weight: 800;
+  font-size: 24px;
+  color: var(--ink);
 }
 
-/* Espacement pour le spinner dans le bouton */
+// Bouton principal : laiton, avec le même relief que les jetons.
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary {
+  --mdc-protected-button-container-color: var(--brass);
+  --mdc-protected-button-label-text-color: var(--brass-ink);
+  --mdc-filled-button-container-color: var(--brass);
+  --mdc-filled-button-label-text-color: var(--brass-ink);
+  box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .18);
+}
+
+button[mat-raised-button],
+button[mat-flat-button] {
+  min-height: 46px;
+  border-radius: v.$radius-sm;
+  font-weight: 700;
+}
+
+// Boutons à contour et boutons texte : laiton, et non la couleur primaire de
+// la palette Material. C'est ce qui garde un seul accent dans toute l'interface.
+.mat-mdc-outlined-button {
+  --mdc-outlined-button-label-text-color: var(--brass);
+  --mdc-outlined-button-outline-color: var(--line);
+  --mat-outlined-button-state-layer-color: var(--brass);
+  min-height: 46px;
+  border-radius: v.$radius-sm;
+  font-weight: 700;
+}
+
+.mat-mdc-button {
+  --mdc-text-button-label-text-color: var(--brass);
+  --mat-text-button-state-layer-color: var(--brass);
+  font-weight: 700;
+}
+
+.mat-mdc-icon-button {
+  --mdc-icon-button-icon-color: var(--ink);
+}
+
+.error-message {
+  color: var(--err-ink);
+  background: var(--err-bg);
+  border-radius: v.$radius-sm;
+  padding: 9px 13px;
+  text-align: center;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
 button mat-progress-spinner {
   display: inline-block;
   vertical-align: middle;
   margin-right: 8px;
 }
 
-/* Cache le badge flottant Google reCAPTCHA */
+// =============================================================================
+//  6. NOTIFICATIONS
+// =============================================================================
+.snackbar-success {
+  --mdc-snackbar-container-color: var(--ok-bg);
+  --mdc-snackbar-supporting-text-color: var(--ok-ink);
+  --mat-mdc-snack-bar-button-color: var(--ok-ink);
+}
+
+.snackbar-error {
+  --mdc-snackbar-container-color: var(--err-bg);
+  --mdc-snackbar-supporting-text-color: var(--err-ink);
+  --mat-mdc-snack-bar-button-color: var(--err-ink);
+}
+
+// =============================================================================
+//  7. DIVERS
+// =============================================================================
+mat-dialog-content {
+  padding-top: 10px;
+}
+
+// Le badge flottant de Google reCAPTCHA reste masqué : la mention légale est
+// portée par le texte des formulaires.
 .grecaptcha-badge {
-    visibility: hidden;
-    opacity: 0;
+  visibility: hidden;
+  opacity: 0;
 }
