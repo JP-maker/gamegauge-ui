@@ -1,95 +1,58 @@
+/* =============================================================================
+   src/app/pages/boards/board-detail/board-detail.component.scss
+   Cette page n'est plus qu'une enveloppe autour du composant scoreboard :
+   un en-tête, ses commandes, et l'état de chargement. Tout ce qui concernait
+   le classement et le tableau des manches a migré dans le scoreboard.
+   ============================================================================= */
+
+@use '../../../../styles/variables' as v;
+
 .header {
   display: flex;
   align-items: center;
-  gap: 16px;
-  margin-bottom: 24px;
+  gap: 12px;
+  margin-bottom: 18px;
 }
 
 h1 {
   margin: 0;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: clamp(22px, 5vw, 28px);
 }
 
-.rules-info {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 24px;
-  flex-wrap: wrap; // Pour les petits écrans
-}
-
-.info-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.participant-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.rank-avatar {
-  background-color: var(--primary-color);
-  color: var(--avatar-color);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: bold;
+.spacer {
+  flex: 1 1 auto;
 }
 
 .loading-spinner {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 50px;
+  padding: 64px 0;
 }
 
-.spacer { flex: 1 1 auto; }
-
-h2 {
-  margin-top: 32px;
+/* Commandes de la partie : les boutons en ligne sur grand écran, repliés
+   derrière un menu sur mobile. */
+.desktop-only {
+  display: none;
 }
 
-.table-container {
-  width: 100%;
-  overflow: auto; // Ajoute une barre de défilement si le tableau est trop large
+.mobile-only {
+  display: block;
+  text-align: right;
 }
 
-table {
-  width: 100%;
-}
-
-th.mat-header-cell, td.mat-cell {
-  text-align: center;
-  padding: 8px;
-}
-
-// Style particulier pour la première colonne (Tour)
-th.mat-column-roundNumber, td.mat-column-roundNumber {
-  font-weight: bold;
-  text-align: left;
-}
-
-.info-text {
-  color: var(--warn-color); // Couleur de texte principale
-}
-
-.subtext {
-  font-size: 12px;
-  color: var(--text-secondary-color);
-}
-.info-item > div {
+@media (min-width: 768px) {
+  .desktop-only {
     display: flex;
-    flex-direction: column;
-}
+    gap: 8px;
+    align-items: center;
+    justify-content: flex-end;
+  }
 
-.points-to-goal {
-  color: var(--text-secondary-color);
-  margin-left: 8px;
-  font-style: italic;
-}
-
-// Griser le bouton "Ajouter Score" si la partie est finie
-button[mat-button][disabled] {
-  background-color: transparent !important;
+  .mobile-only {
+    display: none;
+  }
 }

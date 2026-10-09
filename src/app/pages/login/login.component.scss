@@ -1,22 +1,13 @@
+/* =============================================================================
+   src/app/pages/login/login.component.scss
+   La carte de formulaire et ses espacements viennent de la règle globale
+   .form-container : il ne reste ici que ce qui est propre à cet écran.
+   ============================================================================= */
 
-.error-message {
-  color: var(--warn-color); 
-  text-align: center;
-  margin-bottom: 16px;
+.mb-3.text-end a {
+  font-size: 13.5px;
 }
 
-// On peut aussi styliser la carte pour qu'elle utilise notre couleur de surface
-mat-card {
-  background-color: var(--surface-color); 
-}
-
-mat-card-actions p {
-  color: var(--text-secondary-color);
-
-  a {
-    color: var(--accent-color); 
-    &:hover {
-      color: var(--text-primary-color);
-    }
-  }
+mat-card-actions a:hover {
+  color: var(--ink);
 }

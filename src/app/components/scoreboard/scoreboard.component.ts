@@ -5,25 +5,22 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { CommonModule } from '@angular/common';
 import { Board, Participant } from '../../models/board.model';
 import { RoundData } from '../../models/round.model';
+import { playerColorClass, playerInitials } from '../../utils/player-color.utils';
 
 // Imports pour les types
 import { GameStatus } from '../../utils/game-status.utils';
 
-// Imports Material
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
+// Imports Material — le gabarit n'utilise plus que l'icône : le jeton est un
+// bouton natif, et l'historique une table HTML simple, bien plus facile à
+// styler qu'une mat-table.
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
 
 @Component({
   selector: 'app-scoreboard',
   standalone: true,
   imports: [
     CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTableModule
+    MatIconModule
   ],
   templateUrl: './scoreboard.component.html',
   styleUrl: './scoreboard.component.scss',
@@ -68,6 +65,53 @@ export class ScoreboardComponent implements OnChanges {
   participantIds: number[] = [];
 
   /**
+   * Couleur de jeton de chaque joueur, attribuée une fois pour toutes d'après
+   * sa position dans la partie. Le classement peut ensuite changer sans que la
+   * couleur d'un joueur ne bouge : elle suit le joueur, jamais son rang.
+   */
+  private colorByParticipant = new Map<number, string>();
+
+  /** Classe CSS portant la couleur du joueur. */
+  colorOf(participant: Participant): string {
+    return this.colorByParticipant.get(participant.id) ?? 'player-1';
+  }
+
+  /** Même chose à partir du seul identifiant, pour les en-têtes du tableau. */
+  colorById(participantId: number): string {
+    return this.colorByParticipant.get(participantId) ?? 'player-1';
+  }
+
+  /** Initiales inscrites dans le jeton. */
+  initialsOf(participant: Participant): string {
+    return playerInitials(participant.name);
+  }
+
+  /** Initiales à partir du seul identifiant, pour les en-têtes du tableau. */
+  initialsById(participantId: number): string {
+    return playerInitials(this.participantMap.get(participantId));
+  }
+
+  /** Vrai si ce joueur est le vainqueur désigné par le statut de la partie. */
+  isWinner(participant: Participant): boolean {
+    return !!this.gameStatus?.isGameOver && this.gameStatus?.winner?.id === participant.id;
+  }
+
+  /**
+   * Points restants avant d'atteindre la cible — ou avant de la dépasser,
+   * selon la condition de victoire. Retourne null s'il n'y a pas de cible.
+   */
+  pointsToGoal(participant: Participant): number | null {
+    if (!this.board?.targetScore) {
+      return null;
+    }
+    const total = this.getParticipantTotalScore(participant);
+
+    return this.board.scoreCondition === 'LOWEST_WINS'
+      ? total - this.board.targetScore
+      : this.board.targetScore - total;
+  }
+
+  /**
    * Hook de cycle de vie d'Angular.
    * Cette méthode est appelée à chaque fois qu'une des propriétés @Input change.
    * C'est l'endroit parfait pour recalculer les données d'affichage (comme le tableau récapitulatif).
@@ -100,15 +144,19 @@ export class ScoreboardComponent implements OnChanges {
       this.displayedColumns = [];
       this.participantMap.clear();
       this.participantIds = [];
+      this.colorByParticipant.clear();
       return;
     }
 
     // 1. Créer la map des participants et la liste de leurs IDs
     this.participantMap.clear();
     this.participantIds = [];
-    board.participants.forEach(p => {
+    this.colorByParticipant.clear();
+    board.participants.forEach((p, index) => {
         this.participantMap.set(p.id, p.name);
         this.participantIds.push(p.id);
+        // La couleur vient de la position dans la partie, pas du classement.
+        this.colorByParticipant.set(p.id, playerColorClass(index));
     });
 
     // 2. Définir les colonnes du tableau Material

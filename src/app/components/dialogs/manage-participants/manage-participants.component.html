@@ -15,9 +15,12 @@
 
   <!-- Liste des participants existants -->
   <mat-list role="list">
-    <mat-list-item *ngFor="let p of participants" role="listitem">
-      <span matListItemTitle>{{ p.name }}</span>
-      <span matListItemLine>Score: {{ p.totalScore }}</span>
+    <mat-list-item *ngFor="let p of participants; let i = index" role="listitem">
+      <span matListItemTitle class="participant">
+        <span class="pastille" [ngClass]="colorOf(i)" aria-hidden="true">{{ initialsOf(p) }}</span>
+        {{ p.name }}
+      </span>
+      <span matListItemLine>Score : {{ p.totalScore }}</span>
       <button mat-icon-button color="warn" (click)="onRemoveParticipant(p.id)" aria-label="Supprimer le participant">
         <mat-icon>delete</mat-icon>
       </button>

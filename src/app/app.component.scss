@@ -1,76 +1,97 @@
+/* =============================================================================
+   src/app/app.component.scss
+   Barre de titre et pied de page.
+   ============================================================================= */
+
+@use '../styles/variables' as v;
+
 .main-toolbar {
   display: flex;
-  justify-content: space-between; // Aligne les éléments
-  background-color: var(--primary-color);
+  align-items: center;
+  gap: 8px;
+  padding-inline: 12px;
+  background-color: var(--panel);
+  color: var(--ink);
+  border-bottom: 1px solid var(--line);
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 8px; // Espace entre l'icône et le texte
+  gap: 10px;
+  min-width: 0;
   text-decoration: none;
-  color: white;
+  color: var(--ink);
+
+  img {
+    height: 34px;
+    width: auto;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  span {
+    font-family: v.$font-display;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -.015em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+// Sous 380 px, le nom de marque cède la place aux actions plutôt que de les
+// pousser hors de l'écran.
+@media (max-width: 379px) {
+  .logo span {
+    font-size: 17px;
+  }
 }
 
 .spacer {
-  flex: 1 1 auto; // Prend tout l'espace disponible
-}
-
-.content {
-  padding: 20px;
+  flex: 1 1 auto;
 }
 
 .toolbar-actions {
   display: flex;
-  align-items: center; // Aligne les boutons verticalement au centre
-  gap: 8px; // Ajoute un petit espace entre les boutons
+  align-items: center;
+  gap: 4px;
+  flex: none;
+}
+
+.content {
+  display: block;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 20px 16px 48px;
 }
 
 .app-footer {
+  border-top: 1px solid var(--line);
+
   mat-toolbar {
-    // Centrer le contenu du footer
     display: flex;
     justify-content: center;
     align-items: center;
-    
-    // Appliquer nos couleurs de thème
-    background-color: var(--surface-color);
-    color: var(--text-secondary-color);
-    
-    // Rendre le texte un peu plus petit
-    font-size: 0.9em;
-    padding: 8px 16px; // Un peu moins haut qu'une toolbar normale
+    background-color: var(--panel);
+    color: var(--ink-dim);
+    font-size: 13.5px;
+    padding: 8px 16px;
     min-height: 48px;
+    text-align: center;
   }
 
   a {
-    // S'assurer que le lien a une couleur visible
-    color: var(--accent-color);
-    font-weight: 500; // Le mettre un peu en gras pour qu'il ressorte
+    color: var(--brass);
+    font-weight: 700;
 
     &:hover {
       text-decoration: underline;
     }
-  }
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 12px; // Un peu plus d'espace
-  text-decoration: none;
-  color: white;
-
-  // Style pour l'image du logo
-  img {
-    height: 55px; // Ajustez la hauteur selon vos préférences
-    width: auto;  // Garde les bonnes proportions
-  }
-  
-  // Style pour le nom du site à côté du logo
-  span {
-    font-family: 'Montserrat', sans-serif; // Assurer la bonne police
-    font-weight: 700; // Mettre en gras
-    font-size: 1.2rem;
   }
 }
