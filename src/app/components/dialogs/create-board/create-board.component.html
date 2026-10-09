@@ -2,7 +2,21 @@
 
 <mat-dialog-content>
   <form [formGroup]="createBoardForm" id="createBoardForm" (ngSubmit)="onSave()">
-    
+
+    <!-- Préréglages : remplit les champs ci-dessous, qui restent modifiables. -->
+    <mat-form-field appearance="outline">
+      <mat-label>Partir d'un jeu connu</mat-label>
+      <mat-select [value]="selectedPresetId"
+                  (selectionChange)="onPresetChange($event.value)">
+        <mat-option [value]="customPresetId">Partie personnalisée</mat-option>
+        <mat-option *ngFor="let preset of presets" [value]="preset.id">
+          {{ preset.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <p class="preset-summary" *ngIf="activePreset">{{ activePreset.summary }}</p>
+
     <mat-form-field appearance="outline">
       <mat-label>Nom de la partie</mat-label>
       <input matInput formControlName="name" cdkFocusInitial>
@@ -10,30 +24,36 @@
       <mat-error *ngIf="createBoardForm.get('name')?.hasError('minlength')">3 caractères minimum.</mat-error>
     </mat-form-field>
 
-    <div class="score-condition-group" *ngIf="createBoardForm.get('targetScore')?.value">
-      <label class="mat-body-1">Condition pour le score cible :</label>
-      <mat-radio-group formControlName="scoreCondition" color="primary">
-        <mat-radio-button value="HIGHEST_WINS">Le plus haut score gagne</mat-radio-button>
-        <mat-radio-button value="LOWEST_WINS">Le plus bas score gagne</mat-radio-button>
+    <!-- Toujours visible : la condition de victoire sert aussi à trier le
+         classement, même pour une partie sans score cible comme le Train
+         mexicain ou le Scrabble. -->
+    <div class="score-condition-group">
+      <label id="win-condition-label">Qui gagne&nbsp;?</label>
+      <mat-radio-group formControlName="scoreCondition" color="primary"
+                       aria-labelledby="win-condition-label">
+        <mat-radio-button value="HIGHEST_WINS">Le plus haut score</mat-radio-button>
+        <mat-radio-button value="LOWEST_WINS">Le plus bas score</mat-radio-button>
       </mat-radio-group>
     </div>
 
     <mat-form-field appearance="outline">
-      <mat-label>Score Cible (optionnel)</mat-label>
-      <input matInput formControlName="targetScore" type="number">
+      <mat-label>Score cible (optionnel)</mat-label>
+      <input matInput formControlName="targetScore" type="number" inputmode="numeric">
+      <mat-hint>La partie s'arrête quand un joueur l'atteint.</mat-hint>
     </mat-form-field>
-    
+
     <mat-form-field appearance="outline">
-      <mat-label>Nombre de tours (optionnel)</mat-label>
-      <input matInput formControlName="numberOfRounds" type="number">
+      <mat-label>Nombre de manches (optionnel)</mat-label>
+      <input matInput formControlName="numberOfRounds" type="number" inputmode="numeric">
     </mat-form-field>
 
   </form>
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-button (click)="onCancel()">Annuler</button>
-  <button mat-flat-button color="primary" type="submit" form="createBoardForm" [disabled]="createBoardForm.invalid">
+  <button mat-button type="button" (click)="onCancel()">Annuler</button>
+  <button mat-flat-button color="primary" type="submit" form="createBoardForm"
+          [disabled]="createBoardForm.invalid">
     Créer
   </button>
 </mat-dialog-actions>

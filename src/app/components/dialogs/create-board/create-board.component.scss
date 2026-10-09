@@ -6,10 +6,49 @@ form {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  /* Material laisse le contenu du dialogue sans padding haut, et le libellé
+     flottant du premier champ déborde d'environ 7 px au-dessus de sa boîte :
+     il se faisait rogner par le bord de la zone défilante. On dégage depuis
+     le formulaire, qui nous appartient, plutôt que de disputer la spécificité
+     de .mat-mdc-dialog-content — mesuré, c'est Material qui l'emporte. */
+  padding-top: 10px;
+}
+
+/* Les commandes de ce dialogue passent au laiton plutôt qu'au vert de la
+   palette Material : un seul accent dans toute l'interface. */
+mat-radio-group {
+  --mdc-radio-selected-icon-color: var(--brass);
+  --mdc-radio-selected-focus-icon-color: var(--brass);
+  --mdc-radio-selected-hover-icon-color: var(--brass);
+  --mdc-radio-selected-pressed-icon-color: var(--brass);
+  --mat-radio-checked-ripple-color: var(--brass);
+  --mat-radio-label-text-color: var(--ink);
+}
+
+mat-form-field {
+  --mdc-outlined-text-field-focus-outline-color: var(--brass);
+  --mdc-outlined-text-field-focus-label-text-color: var(--brass);
+  --mdc-outlined-text-field-caret-color: var(--brass);
+  --mat-select-enabled-arrow-color: var(--ink-dim);
+  --mat-select-focused-arrow-color: var(--brass);
+  --mat-select-enabled-trigger-text-color: var(--ink);
+}
+
+/* Résumé du préréglage choisi : il confirme ce qui vient d'être appliqué,
+   juste sous le sélecteur et avant les champs concernés. */
+.preset-summary {
+  margin: -6px 0 14px;
+  padding: 9px 12px;
+  border-left: 2px solid var(--brass);
+  border-radius: 0 6px 6px 0;
+  background: var(--panel-2);
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--ink-dim);
 }
 
 .score-condition-group {
-  margin: 10px 0 4px;
+  margin: 6px 0 10px;
 
   label {
     display: block;
@@ -23,7 +62,7 @@ form {
   mat-radio-group {
     display: flex;
     flex-wrap: wrap;
-    gap: 8px 20px;
-    margin-top: 6px;
+    gap: 4px 18px;
+    margin-top: 4px;
   }
 }
