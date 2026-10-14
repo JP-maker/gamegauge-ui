@@ -18,6 +18,8 @@ import { ConfirmComponent } from '../../components/dialogs/confirm/confirm.compo
 import { CreateBoardComponent } from '../../components/dialogs/create-board/create-board.component';
 import { ScoreboardComponent } from '../../components/scoreboard/scoreboard.component';
 import { GameStatus, calculateGameStatus, nextRoundNumber } from '../../utils/game-status.utils';
+import { VictoryOverlayComponent } from '../../components/victory-overlay/victory-overlay.component';
+import { GUEST_VICTORY_KEY, VictoryView, victoryToCelebrate } from '../../utils/victory.utils';
 import { NotificationService } from '../../services/notification.service';
 
 @Component({
@@ -32,7 +34,8 @@ import { NotificationService } from '../../services/notification.service';
     MatIconModule, 
     MatDialogModule, 
     MatTableModule, 
-    ScoreboardComponent
+    ScoreboardComponent,
+    VictoryOverlayComponent
   ],
   templateUrl: './landing.component.html',
   styleUrl: './landing.component.scss'
@@ -46,6 +49,9 @@ export class LandingComponent implements OnInit {
   isNewBoard = false;
   gameStatus: GameStatus | null = null;
 
+  // Non nul tant que l'écran de victoire est affiché.
+  victory: VictoryView | null = null;
+
   ngOnInit(): void {
     this.loadGuestBoard();
   }
@@ -55,6 +61,10 @@ export class LandingComponent implements OnInit {
     if (board) {
       this.guestBoard = board;
       this.isNewBoard = false;
+      // Sans cet appel, une partie déjà terminée rouverte depuis le navigateur
+      // n'affichait ni le bandeau « Partie terminée » ni l'écran de victoire :
+      // le statut n'était calculé qu'à la saisie d'un score.
+      this.syncGameStatus();
     } else {
       // Si on doit en créer un, on ne l'assigne pas tout de suite
       this.guestBoard = null;
@@ -218,6 +228,7 @@ export class LandingComponent implements OnInit {
       if (confirmed) {
         this.localStorageService.clearGuestBoard(); // Efface les données du stockage
         this.gameStatus = null;
+        this.victory = null;
         this.loadGuestBoard(); // Recharge le composant (ce qui affichera le bouton "Démarrer")
       }
     });
@@ -254,7 +265,29 @@ export class LandingComponent implements OnInit {
   private saveState(): void {
     if (!this.guestBoard) return;
     this.localStorageService.saveGuestBoard(this.guestBoard);
-    this.gameStatus = calculateGameStatus(this.guestBoard);
+    this.syncGameStatus();
     this.guestBoard = { ...this.guestBoard };
+  }
+
+  /**
+   * Recalcule l'état de la partie et déclenche, le cas échéant, l'écran de
+   * victoire. Même règle que pour une partie enregistrée : une seule fête par
+   * partie gagnée, réarmée dès que la partie repart.
+   */
+  private syncGameStatus(): void {
+    this.gameStatus = calculateGameStatus(this.guestBoard);
+
+    const toCelebrate = victoryToCelebrate(GUEST_VICTORY_KEY, this.guestBoard, this.gameStatus);
+
+    if (toCelebrate) {
+      this.victory = toCelebrate;
+    } else if (!this.gameStatus?.isGameOver) {
+      this.victory = null;
+    }
+  }
+
+  /** Ferme l'écran de victoire. La partie, elle, reste terminée. */
+  closeVictory(): void {
+    this.victory = null;
   }
 }

@@ -28,6 +28,7 @@
       [board]="vm.board"
       [gameStatus]="vm.gameStatus"
       (addScore)="openAddScoreDialog(vm.board.id, $event)"
+      (addRound)="openAddRoundDialog(vm.board)"
       (manageParticipants)="openManageParticipantsDialog(vm.board)">
     </app-scoreboard>
 

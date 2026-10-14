@@ -101,6 +101,14 @@
         (manageParticipants)="openManageParticipantsDialog()">
       </app-scoreboard>
 
+      <app-victory-overlay
+        *ngIf="victory"
+        [winnerName]="victory.name"
+        [score]="victory.score"
+        [colorClass]="victory.colorClass"
+        (closed)="closeVictory()">
+      </app-victory-overlay>
+
     </ng-template>
 
   </div>

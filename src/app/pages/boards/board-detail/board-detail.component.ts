@@ -3,13 +3,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, forkJoin, of } from 'rxjs';
 import { map, switchMap, catchError, tap } from 'rxjs/operators';
 
 // Modèles et Utilitaires
 import { Board, Participant } from '../../../models/board.model';
-import { GameStatus, calculateGameStatus } from '../../../utils/game-status.utils';
-import { playerColorClass } from '../../../utils/player-color.utils';
+import { GameStatus, calculateGameStatus, nextRoundNumber } from '../../../utils/game-status.utils';
 
 // Services
 import { BoardService } from '../../../services/board.service';
@@ -18,11 +17,13 @@ import { NotificationService } from '../../../services/notification.service';
 // Composants de dialogue
 import { ManageParticipantsComponent } from '../../../components/dialogs/manage-participants/manage-participants.component';
 import { AddScoreComponent } from '../../../components/dialogs/add-score/add-score.component';
+import { AddRoundComponent, RoundResult } from '../../../components/dialogs/add-round/add-round.component';
 import { ConfirmComponent } from '../../../components/dialogs/confirm/confirm.component';
 
-// Composants réutilisables
+// Composant réutilisable
 import { ScoreboardComponent } from '../../../components/scoreboard/scoreboard.component';
 import { VictoryOverlayComponent } from '../../../components/victory-overlay/victory-overlay.component';
+import { VictoryView, victoryKeyForBoard, victoryToCelebrate } from '../../../utils/victory.utils';
 
 // Imports Angular Material
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -67,7 +68,7 @@ export class BoardDetailComponent implements OnInit {
 
   // --- Écran de fin de partie ---
   // Non nul tant que l'écran de victoire est affiché.
-  victory: { name: string, score: number, colorClass: string } | null = null;
+  victory: VictoryView | null = null;
 
   ngOnInit(): void {
     // La chaîne d'observables qui pilote le composant.
@@ -110,13 +111,8 @@ export class BoardDetailComponent implements OnInit {
   // --- Écran de fin de partie ---
 
   /**
-   * Décide s'il faut afficher l'écran de victoire.
-   *
-   * La difficulté n'est pas de détecter la fin de partie — `calculateGameStatus`
-   * s'en charge — mais de ne la fêter qu'une fois : les données sont rechargées
-   * à chaque saisie de score, et sans mémoire l'écran reviendrait à chaque
-   * rafraîchissement, rechargement de page compris. D'où le repère posé dans
-   * `sessionStorage`, effacé dès que la partie repart (« Recommencer »).
+   * Décide s'il faut afficher l'écran de victoire. La règle elle-même vit dans
+   * `victory.utils.ts`, partagée avec la partie rapide du mode invité.
    */
   private checkForVictory(vm: { board: Board, gameStatus: GameStatus | null } | null): void {
     const board = vm?.board;
@@ -124,64 +120,19 @@ export class BoardDetailComponent implements OnInit {
       return;
     }
 
-    const status = vm?.gameStatus;
-    if (!status?.isGameOver || !status.winner) {
+    const toCelebrate = victoryToCelebrate(victoryKeyForBoard(board.id), board, vm?.gameStatus);
+
+    if (toCelebrate) {
+      this.victory = toCelebrate;
+    } else if (!vm?.gameStatus?.isGameOver) {
+      // La partie a repris : l'écran disparaît avec elle.
       this.victory = null;
-      this.forgetCelebration(board.id);
-      return;
     }
-
-    if (this.wasCelebrated(board.id)) {
-      return;
-    }
-    this.rememberCelebration(board.id);
-
-    const winner = status.winner;
-    const position = (board.participants || []).findIndex(p => p.id === winner.id);
-
-    this.victory = {
-      name: winner.name,
-      // La couleur du jeton vient de la position du joueur dans la partie,
-      // exactement comme dans le classement : le jeton qui tombe au centre est
-      // bien celui que le joueur avait sous les yeux.
-      colorClass: playerColorClass(position < 0 ? 0 : position),
-      score: (winner.scores || []).reduce((sum, s) => sum + s.scoreValue, 0)
-    };
   }
 
   /** Ferme l'écran de victoire. La partie, elle, reste terminée. */
   closeVictory(): void {
     this.victory = null;
-  }
-
-  private celebrationKey(boardId: number): string {
-    return `gg-victory-${boardId}`;
-  }
-
-  private wasCelebrated(boardId: number): boolean {
-    try {
-      return sessionStorage.getItem(this.celebrationKey(boardId)) !== null;
-    } catch {
-      // Stockage indisponible (navigation privée verrouillée, par exemple) :
-      // mieux vaut fêter deux fois que pas du tout.
-      return false;
-    }
-  }
-
-  private rememberCelebration(boardId: number): void {
-    try {
-      sessionStorage.setItem(this.celebrationKey(boardId), '1');
-    } catch {
-      // Sans mémoire, l'écran pourra réapparaître : ce n'est pas bloquant.
-    }
-  }
-
-  private forgetCelebration(boardId: number): void {
-    try {
-      sessionStorage.removeItem(this.celebrationKey(boardId));
-    } catch {
-      // Rien à faire.
-    }
   }
 
   /**
@@ -206,6 +157,51 @@ export class BoardDetailComponent implements OnInit {
         this.notificationService.showSuccess('Liste des participants mise à jour.');
         this.refreshData();
       }
+    });
+  }
+
+  /**
+   * Saisie d'une manche entière. L'API n'expose pas d'enregistrement groupé :
+   * on envoie un appel par joueur et on attend qu'ils aboutissent tous avant
+   * de rafraîchir, plutôt que de recharger le tableau après chacun.
+   */
+  openAddRoundDialog(board: Board): void {
+    if (!board.participants?.length) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(AddRoundComponent, {
+      width: '440px',
+      data: {
+        participants: board.participants,
+        nextRoundNumber: nextRoundNumber(board)
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((result: RoundResult | undefined) => {
+      if (!result) {
+        return;
+      }
+
+      const calls = result.scores.map(entry =>
+        this.boardService.setScore(board.id, entry.participantId, {
+          scoreValue: entry.scoreValue,
+          roundNumber: result.roundNumber
+        })
+      );
+
+      forkJoin(calls).subscribe({
+        next: () => {
+          this.notificationService.showSuccess(`Manche ${result.roundNumber} enregistrée.`);
+          this.refreshData();
+        },
+        error: () => {
+          // Un appel a pu passer et un autre échouer : on recharge pour
+          // montrer l'état réel plutôt que de laisser un affichage faux.
+          this.notificationService.showError("Une partie des scores n'a pas pu être enregistrée.");
+          this.refreshData();
+        }
+      });
     });
   }
 
