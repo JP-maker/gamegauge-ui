@@ -1,0 +1,143 @@
+/* =============================================================================
+   src/app/components/victory-overlay/victory-overlay.component.scss
+   L'écran de fin de partie : jeton, nom, confettis.
+
+   Toutes les couleurs viennent des variables de thème posées sur le body, le
+   voile compris : l'écran suit donc le feutre comme le lin sans une seule
+   couleur écrite ici.
+   ============================================================================= */
+
+@use '../../../styles/variables' as v;
+
+:host {
+  display: contents;
+}
+
+.victory {
+  position: fixed;
+  inset: 0;
+  z-index: 1200; /* au-dessus du conteneur d'overlay du CDK */
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: var(--veil);
+  padding:
+    calc(24px + env(safe-area-inset-top, 0px))
+    max(20px, env(safe-area-inset-right, 0px))
+    calc(24px + env(safe-area-inset-bottom, 0px))
+    max(20px, env(safe-area-inset-left, 0px));
+  animation: veil-in .32s ease both;
+}
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.stage {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  max-width: 560px;
+  text-align: center;
+}
+
+.label {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+  color: var(--ink-dim);
+  animation: fade-up .4s .12s ease both;
+}
+
+.token {
+  position: relative;
+  width: 104px;
+  height: 104px;
+  border-radius: 50%;
+  background: var(--player-bg);
+  color: var(--player-ink);
+  box-shadow: v.$token-relief;
+  display: grid;
+  place-items: center;
+  font-family: v.$font-display;
+  font-weight: 800;
+  font-size: 40px;
+  line-height: 1;
+  animation: drop-in .62s cubic-bezier(.2, 1.5, .4, 1) both;
+}
+
+.crown {
+  position: absolute;
+  top: -26px;
+  color: var(--win);
+  font-size: 34px;
+  width: 34px;
+  height: 34px;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .35));
+}
+
+.name {
+  margin: 0;
+  font-family: v.$font-display;
+  font-weight: 800;
+  font-size: clamp(42px, 13vw, 92px);
+  line-height: 1;
+  color: var(--ink);
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+  animation: pop-in .4s .22s cubic-bezier(.2, 1.5, .4, 1) both;
+}
+
+.score {
+  margin: 0;
+  font-family: v.$font-display;
+  font-weight: 700;
+  font-size: clamp(18px, 4vw, 24px);
+  color: var(--ink-dim);
+  font-variant-numeric: tabular-nums;
+  animation: fade-up .4s .46s ease both;
+}
+
+.actions {
+  margin-top: 10px;
+  animation: fade-up .4s .46s ease both;
+}
+
+@keyframes veil-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes drop-in {
+  from { transform: translateY(-120px) scale(.5); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+@keyframes pop-in {
+  from { transform: scale(.4); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+@keyframes fade-up {
+  from { transform: translateY(12px); opacity: 0; }
+  to   { transform: none; opacity: 1; }
+}
+
+/* Mouvement réduit : l'écran s'affiche directement dans son état final. Le
+   moteur de confettis, lui, n'est même pas démarré (voir le composant). */
+@media (prefers-reduced-motion: reduce) {
+  .victory,
+  .victory * {
+    animation: none;
+  }
+}

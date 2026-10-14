@@ -51,6 +51,7 @@ $felt-ink-dim:   #9fbcb0; // texte atténué — ivoire désaturé, et non plus 
 $felt-brass:     #d9a84c; // action principale, liens
 $felt-brass-ink: #17251e; // texte posé sur le laiton
 $felt-win:       #ffd479; // couronne et liseré du meneur
+$felt-veil:      rgba(9, 31, 25, .975); // voile de l'écran de fin de partie
 $felt-ok-bg:     #1f7a5c;
 $felt-ok-ink:    #eafaf3;
 $felt-err-bg:    #8f2f22;
@@ -69,6 +70,7 @@ $linen-ink-dim:   #5e7168;
 $linen-brass:     #8a6a14; // assombri pour tenir le contraste sur fond clair
 $linen-brass-ink: #ffffff;
 $linen-win:       #8a6a14;
+$linen-veil:      rgba(236, 241, 238, .975);
 $linen-ok-bg:     #1b6a50;
 $linen-ok-ink:    #ffffff;
 $linen-err-bg:    #a3321f;
