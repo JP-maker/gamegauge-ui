@@ -1,0 +1,30 @@
+<!-- Fichier : src/app/components/victory-overlay/victory-overlay.component.html -->
+
+<div class="victory"
+     [ngClass]="colorClass"
+     role="dialog"
+     aria-modal="true"
+     [attr.aria-label]="winnerName + ' remporte la partie'"
+     (click)="onBackdropClick($event)">
+
+  <canvas #canvas class="confetti" aria-hidden="true"></canvas>
+
+  <div class="stage">
+    <p class="label">Partie terminée</p>
+
+    <div class="token" aria-hidden="true">
+      <mat-icon class="crown">emoji_events</mat-icon>
+      {{ initials }}
+    </div>
+
+    <h2 class="name">{{ winnerName }}</h2>
+
+    <p class="score">{{ score }} {{ score === 1 || score === -1 ? 'point' : 'points' }}</p>
+
+    <div class="actions">
+      <button #continueButton mat-flat-button color="primary" type="button" (click)="close()">
+        Continuer
+      </button>
+    </div>
+  </div>
+</div>

@@ -82,6 +82,7 @@ html {
   --brass: #{v.$felt-brass};
   --brass-ink: #{v.$felt-brass-ink};
   --win: #{v.$felt-win};
+  --veil: #{v.$felt-veil};
   --ok-bg: #{v.$felt-ok-bg};
   --ok-ink: #{v.$felt-ok-ink};
   --err-bg: #{v.$felt-err-bg};
@@ -103,6 +104,7 @@ html {
   --brass: #{v.$linen-brass};
   --brass-ink: #{v.$linen-brass-ink};
   --win: #{v.$linen-win};
+  --veil: #{v.$linen-veil};
   --ok-bg: #{v.$linen-ok-bg};
   --ok-ink: #{v.$linen-ok-ink};
   --err-bg: #{v.$linen-err-bg};
@@ -146,11 +148,6 @@ html {
   --mdc-outlined-text-field-input-text-color: var(--ink);
   --mdc-outlined-text-field-label-text-color: var(--ink-dim);
   --mdc-outlined-text-field-outline-color: var(--line);
-  // L'état actif reprend le laiton : un seul accent dans toute l'interface,
-  // au lieu du vert de la palette Material.
-  --mdc-outlined-text-field-focus-outline-color: var(--brass);
-  --mdc-outlined-text-field-focus-label-text-color: var(--brass);
-  --mdc-outlined-text-field-caret-color: var(--brass);
   --mdc-list-list-item-label-text-color: var(--ink);
   --mat-icon-color: var(--ink);
   --mat-menu-container-color: var(--panel);
@@ -359,12 +356,8 @@ button mat-progress-spinner {
 // =============================================================================
 //  7. DIALOGUES
 // =============================================================================
-// Material applique son propre padding via .mat-mdc-dialog-content, plus
-// spécifique qu'un sélecteur d'élément : viser la classe est ce qui permet de
-// se passer du !important que portait l'ancienne feuille. Sans cela, le
-// libellé flottant d'un champ placé en haut du dialogue est rogné.
-.mat-mdc-dialog-content {
-  padding-top: 16px;
+mat-dialog-content {
+  padding-top: 10px;
 }
 
 h2[mat-dialog-title],
