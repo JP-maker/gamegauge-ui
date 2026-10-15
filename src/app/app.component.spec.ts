@@ -4,6 +4,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
+import { environment as prodEnvironment } from '../environments/environment.prod';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -29,5 +30,19 @@ describe('AppComponent', () => {
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('.logo span')?.textContent).toContain('GameGauge');
+  });
+
+  it('affiche la version dans le pied de page', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.app-footer .version')?.textContent?.trim()).toBe('dev');
+  });
+
+  it('garde dans environment.prod le marqueur que la CI remplace', () => {
+    // Le garde-fou de l'estampillage : si quelqu'un réécrit ce fichier sans le
+    // marqueur, le `sed` de la CI ne trouve plus rien et la version affichée
+    // en production se fige silencieusement.
+    expect(prodEnvironment.version).toBe('VERSION_AU_BUILD');
   });
 });

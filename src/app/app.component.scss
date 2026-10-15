@@ -74,6 +74,25 @@
 .app-footer {
   border-top: 1px solid var(--line);
 
+  // mat-toolbar impose `white-space: nowrap` et une hauteur fixe : avec la
+  // version en plus, la ligne dépassait de l'écran sur un téléphone.
+  mat-toolbar {
+    white-space: normal;
+    height: auto;
+    padding-block: 10px;
+  }
+
+  // Discrète : c'est un repère d'exploitation, pas une information pour le
+  // joueur. Lisible quand on la cherche, invisible quand on ne la cherche pas.
+  .version {
+    margin-left: 10px;
+    font-size: 11px;
+    letter-spacing: .04em;
+    opacity: .65;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
   mat-toolbar {
     display: flex;
     justify-content: center;

@@ -49,6 +49,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Estampiller la version
+        # Le Dockerfile fait `COPY . .` avant de builder : modifier le fichier
+        # ici suffit, l'image emporte la valeur. Pas d'argument de build à
+        # faire transiter.
+        run: |
+          sed -i "s|VERSION_AU_BUILD|$(date -u +%Y-%m-%d) · ${GITHUB_SHA::7}|" src/environments/environment.prod.ts
+          grep -n "version:" src/environments/environment.prod.ts
+
       - uses: docker/setup-buildx-action@v3
 
       - name: Connexion au registre GHCR

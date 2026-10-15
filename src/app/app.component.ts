@@ -14,6 +14,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Title, Meta } from '@angular/platform-browser';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -35,6 +36,9 @@ export class AppComponent {
   private breakpointObserver = inject(BreakpointObserver);
   public authService = inject(AuthService);
   public themeService = inject(ThemeService);
+
+  /** Version affichée dans le pied de page, estampillée au build. */
+  readonly version = environment.version;
 
   constructor(private titleService: Title, private metaService: Meta) {
     // Appeler le constructeur du service pour qu'il s'initialise au démarrage de l'app
