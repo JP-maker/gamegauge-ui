@@ -11,7 +11,8 @@
 @use '@angular/material' as mat;
 @use 'styles/variables' as v;
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 // =============================================================================
 //  1. THÈME ANGULAR MATERIAL
@@ -82,7 +83,6 @@ html {
   --brass: #{v.$felt-brass};
   --brass-ink: #{v.$felt-brass-ink};
   --win: #{v.$felt-win};
-  --veil: #{v.$felt-veil};
   --ok-bg: #{v.$felt-ok-bg};
   --ok-ink: #{v.$felt-ok-ink};
   --err-bg: #{v.$felt-err-bg};
@@ -104,7 +104,6 @@ html {
   --brass: #{v.$linen-brass};
   --brass-ink: #{v.$linen-brass-ink};
   --win: #{v.$linen-win};
-  --veil: #{v.$linen-veil};
   --ok-bg: #{v.$linen-ok-bg};
   --ok-ink: #{v.$linen-ok-ink};
   --err-bg: #{v.$linen-err-bg};
@@ -140,20 +139,15 @@ html {
 
   // Quelques jetons Material pointés sur nos surfaces : c'est ce qui remplace
   // les !important de l'ancienne feuille.
-  --mdc-dialog-container-color: var(--panel);
-  --mdc-dialog-subhead-color: var(--ink);
-  --mdc-dialog-supporting-text-color: var(--ink-dim);
-  --mdc-elevated-card-container-color: var(--panel);
-  --mdc-outlined-card-container-color: var(--panel);
-  --mdc-outlined-text-field-input-text-color: var(--ink);
-  --mdc-outlined-text-field-label-text-color: var(--ink-dim);
-  --mdc-outlined-text-field-outline-color: var(--line);
-  // L'état actif reprend le laiton : un seul accent dans toute l'interface,
-  // au lieu du vert de la palette Material.
-  --mdc-outlined-text-field-focus-outline-color: var(--brass);
-  --mdc-outlined-text-field-focus-label-text-color: var(--brass);
-  --mdc-outlined-text-field-caret-color: var(--brass);
-  --mdc-list-list-item-label-text-color: var(--ink);
+  --mat-dialog-container-color: var(--panel);
+  --mat-dialog-subhead-color: var(--ink);
+  --mat-dialog-supporting-text-color: var(--ink-dim);
+  --mat-card-elevated-container-color: var(--panel);
+  --mat-card-outlined-container-color: var(--panel);
+  --mat-form-field-outlined-input-text-color: var(--ink);
+  --mat-form-field-outlined-label-text-color: var(--ink-dim);
+  --mat-form-field-outlined-outline-color: var(--line);
+  --mat-list-list-item-label-text-color: var(--ink);
   --mat-icon-color: var(--ink);
   --mat-menu-container-color: var(--panel);
   --mat-menu-item-label-text-color: var(--ink);
@@ -280,10 +274,10 @@ mat-card-title {
 // Bouton principal : laiton, avec le même relief que les jetons.
 .mat-mdc-raised-button.mat-primary,
 .mat-mdc-unelevated-button.mat-primary {
-  --mdc-protected-button-container-color: var(--brass);
-  --mdc-protected-button-label-text-color: var(--brass-ink);
-  --mdc-filled-button-container-color: var(--brass);
-  --mdc-filled-button-label-text-color: var(--brass-ink);
+  --mat-button-protected-container-color: var(--brass);
+  --mat-button-protected-label-text-color: var(--brass-ink);
+  --mat-button-filled-container-color: var(--brass);
+  --mat-button-filled-label-text-color: var(--brass-ink);
   box-shadow: inset 0 -2px 0 rgba(0, 0, 0, .18);
 }
 
@@ -297,32 +291,32 @@ button[mat-flat-button] {
 // Boutons à contour et boutons texte : laiton, et non la couleur primaire de
 // la palette Material. C'est ce qui garde un seul accent dans toute l'interface.
 .mat-mdc-outlined-button {
-  --mdc-outlined-button-label-text-color: var(--brass);
-  --mdc-outlined-button-outline-color: var(--line);
-  --mat-outlined-button-state-layer-color: var(--brass);
+  --mat-button-outlined-label-text-color: var(--brass);
+  --mat-button-outlined-outline-color: var(--line);
+  --mat-button-outlined-state-layer-color: var(--brass);
   min-height: 46px;
   border-radius: v.$radius-sm;
   font-weight: 700;
 }
 
 .mat-mdc-button {
-  --mdc-text-button-label-text-color: var(--brass);
-  --mat-text-button-state-layer-color: var(--brass);
+  --mat-button-text-label-text-color: var(--brass);
+  --mat-button-text-state-layer-color: var(--brass);
   font-weight: 700;
 }
 
 .mat-mdc-icon-button {
-  --mdc-icon-button-icon-color: var(--ink);
+  --mat-icon-button-icon-color: var(--ink);
 }
 
 // État désactivé : un bouton grisé doit rester lisible. Les valeurs par défaut
 // de Material le font presque disparaître sur le feutre.
 .mat-mdc-raised-button:disabled,
 .mat-mdc-unelevated-button:disabled {
-  --mdc-protected-button-disabled-container-color: var(--panel-2);
-  --mdc-protected-button-disabled-label-text-color: var(--ink-dim);
-  --mdc-filled-button-disabled-container-color: var(--panel-2);
-  --mdc-filled-button-disabled-label-text-color: var(--ink-dim);
+  --mat-button-protected-disabled-container-color: var(--panel-2);
+  --mat-button-protected-disabled-label-text-color: var(--ink-dim);
+  --mat-button-filled-disabled-container-color: var(--panel-2);
+  --mat-button-filled-disabled-label-text-color: var(--ink-dim);
   border: 1px solid var(--line);
   box-shadow: none;
 }
@@ -347,26 +341,22 @@ button mat-progress-spinner {
 //  6. NOTIFICATIONS
 // =============================================================================
 .snackbar-success {
-  --mdc-snackbar-container-color: var(--ok-bg);
-  --mdc-snackbar-supporting-text-color: var(--ok-ink);
+  --mat-snackbar-container-color: var(--ok-bg);
+  --mat-snackbar-supporting-text-color: var(--ok-ink);
   --mat-mdc-snack-bar-button-color: var(--ok-ink);
 }
 
 .snackbar-error {
-  --mdc-snackbar-container-color: var(--err-bg);
-  --mdc-snackbar-supporting-text-color: var(--err-ink);
+  --mat-snackbar-container-color: var(--err-bg);
+  --mat-snackbar-supporting-text-color: var(--err-ink);
   --mat-mdc-snack-bar-button-color: var(--err-ink);
 }
 
 // =============================================================================
 //  7. DIALOGUES
 // =============================================================================
-// Material applique son propre padding via .mat-mdc-dialog-content, plus
-// spécifique qu'un sélecteur d'élément : viser la classe est ce qui permet de
-// se passer du !important que portait l'ancienne feuille. Sans cela, le
-// libellé flottant d'un champ placé en haut du dialogue est rogné.
-.mat-mdc-dialog-content {
-  padding-top: 16px;
+mat-dialog-content {
+  padding-top: 10px;
 }
 
 h2[mat-dialog-title],

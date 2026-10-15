@@ -1,26 +1,20 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
+import { environment } from '../../environments/environment';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  // Injecter notre service d'authentification
-  const authService = inject(AuthService);
-  const authToken = authService.getToken();
+  const authToken = inject(AuthService).getToken();
 
-  // Si le token n'existe pas, on ne fait rien et on passe à la suite.
-  // C'est le cas pour les requêtes de login ou de register.
-  if (!authToken) {
+  // Le jeton ne part que vers notre propre API. Aujourd'hui toutes les requêtes
+  // HttpClient y vont, mais il suffirait d'un appel vers un service tiers —
+  // une météo, une image distante — pour que l'en-tête Authorization parte avec.
+  if (!authToken || !req.url.startsWith(environment.apiUrl)) {
     return next(req);
   }
 
-  // Si le token existe, on clone la requête pour y ajouter l'en-tête Authorization.
-  // On clone car les requêtes (req) sont immuables.
-  const authReq = req.clone({
-    setHeaders: {
-      Authorization: `Bearer ${authToken}`
-    }
-  });
-
-  // On passe la nouvelle requête (avec l'en-tête) au prochain maillon de la chaîne.
-  return next(authReq);
+  // On clone car les requêtes sont immuables.
+  return next(req.clone({
+    setHeaders: { Authorization: `Bearer ${authToken}` }
+  }));
 };
