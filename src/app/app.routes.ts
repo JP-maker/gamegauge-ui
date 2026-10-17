@@ -68,6 +68,14 @@ export const routes: Routes = [
     title: 'Réinitialisation — GameGauge',
   },
 
+  // --- SOUTIEN -------------------------------------------------------------
+  {
+    path: 'don',
+    loadComponent: () =>
+      import('./pages/don/don.component').then(m => m.DonComponent),
+    title: 'Soutenir GameGauge',
+  },
+
   // --- REDIRECTION ---------------------------------------------------------
   // Toute route inconnue revient à l'accueil ; le garde décide ensuite où
   // envoyer réellement le visiteur.

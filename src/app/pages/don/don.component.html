@@ -1,0 +1,38 @@
+<!-- Fichier : src/app/pages/don/don.component.html -->
+
+<section class="don">
+  <h1>Soutenir GameGauge</h1>
+
+  <p class="lede">
+    GameGauge est gratuit, sans publicité et sans revente de données. Il reste
+    un hébergement et un nom de domaine à payer chaque mois : si l'outil vous
+    rend service autour de la table, vous pouvez y contribuer.
+  </p>
+
+  <!-- Le QR vit sur un fond blanc qui lui est propre : posé directement sur le
+       feutre, ses modules bleu marine ne seraient plus lisibles par un
+       appareil photo. -->
+  <div class="qr">
+    <img src="don-paypal.png"
+         width="500" height="500"
+         alt="QR code PayPal pour faire un don à GameGauge">
+  </div>
+
+  <p class="hint">Scannez ce code avec votre téléphone, ou&nbsp;:</p>
+
+  <a mat-flat-button color="primary"
+     class="pay"
+     [href]="paypalUrl"
+     target="_blank"
+     rel="noopener noreferrer">
+    <mat-icon>favorite</mat-icon>
+    Faire un don via PayPal
+  </a>
+
+  <p class="note">
+    Le paiement se fait entièrement sur PayPal : GameGauge ne voit, ne reçoit
+    et n'enregistre aucune donnée bancaire.
+  </p>
+
+  <a routerLink="/" class="back">Retour à l'accueil</a>
+</section>

@@ -39,6 +39,14 @@ describe('AppComponent', () => {
     expect(compiled.querySelector('.app-footer .version')?.textContent?.trim()).toBe('dev');
   });
 
+  it('propose le don depuis le pied de page', () => {
+    const fixture = TestBed.createComponent(AppComponent);
+    fixture.detectChanges();
+    const link = fixture.nativeElement.querySelector('.app-footer a[href="/don"]') as HTMLAnchorElement;
+
+    expect(link?.textContent?.trim()).toBe('Faire un don');
+  });
+
   it('garde dans environment.prod le marqueur que la CI remplace', () => {
     // Le garde-fou de l'estampillage : si quelqu'un réécrit ce fichier sans le
     // marqueur, le `sed` de la CI ne trouve plus rien et la version affichée
