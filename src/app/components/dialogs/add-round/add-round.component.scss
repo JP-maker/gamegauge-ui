@@ -86,3 +86,12 @@ form {
     margin-top: 2px;
   }
 }
+
+// Bouton ± : le seul moyen de saisir un malus depuis un pavé numérique de
+// téléphone, qui n'a pas de touche « − ». Laiton, comme toute action.
+.sign {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--brass);
+}

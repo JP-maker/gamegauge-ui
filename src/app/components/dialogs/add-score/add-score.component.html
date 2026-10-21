@@ -5,6 +5,10 @@
     <mat-form-field appearance="outline">
       <mat-label>Score</mat-label>
       <input matInput formControlName="scoreValue" type="number">
+      <button mat-icon-button matSuffix type="button"
+              class="sign"
+              (click)="toggleSign()"
+              aria-label="Changer le signe du score">±</button>
     </mat-form-field>
     <mat-form-field appearance="outline">
       <mat-label>Tour n°</mat-label>

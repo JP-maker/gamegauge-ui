@@ -90,6 +90,16 @@ export class AddRoundComponent {
     });
   }
 
+  /**
+   * Inverse le signe d'un score. Les pavés numériques des téléphones n'ont
+   * pas de touche « − » : sans ce bouton, impossible d'y saisir un malus.
+   * `0 - x` plutôt que `-x`, pour ne jamais produire un « -0 ».
+   */
+  toggleSign(index: number): void {
+    const control = this.scores.at(index).get('scoreValue')!;
+    control.setValue(0 - (Number(control.value) || 0));
+  }
+
   get scores(): FormArray {
     return this.roundForm.get('scores') as FormArray;
   }

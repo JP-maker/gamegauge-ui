@@ -28,8 +28,11 @@
                  [id]="'score-' + i"
                  formControlName="scoreValue"
                  type="number"
-                 inputmode="numeric"
                  [attr.autofocus]="i === 0 ? '' : null">
+          <button mat-icon-button matSuffix type="button"
+                  class="sign"
+                  (click)="toggleSign(i)"
+                  [attr.aria-label]="'Changer le signe des points de ' + participantAt(i).name">±</button>
         </mat-form-field>
       </div>
     </div>

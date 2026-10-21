@@ -51,6 +51,16 @@ export class AddScoreComponent {
   }
 
   /**
+   * Inverse le signe du score. Les pavés numériques des téléphones n'ont pas
+   * de touche « − » : sans ce bouton, impossible d'y saisir un malus.
+   * `0 - x` plutôt que `-x`, pour ne jamais produire un « -0 ».
+   */
+  toggleSign(): void {
+    const control = this.addScoreForm.get('scoreValue')!;
+    control.setValue(0 - (Number(control.value) || 0));
+  }
+
+  /**
    * Méthode appelée lors de la soumission du formulaire.
    * Si le formulaire est valide, elle ferme le dialogue en retournant
    * les valeurs du formulaire au composant parent.

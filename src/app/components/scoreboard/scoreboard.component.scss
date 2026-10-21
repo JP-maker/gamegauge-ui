@@ -269,6 +269,12 @@
   font-variant-numeric: tabular-nums;
 }
 
+// Quatre caractères (« -128 », « 1250 ») : à 25 px ils débordent du cercle.
+.token__value--long {
+  font-size: 18px;
+  letter-spacing: -.02em;
+}
+
 .token__unit {
   font-family: v.$font-body;
   font-weight: 700;

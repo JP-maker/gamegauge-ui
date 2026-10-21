@@ -70,4 +70,61 @@ describe('AddRoundComponent', () => {
       ]
     });
   });
+
+  describe('scores négatifs', () => {
+    function signButton(i: number): HTMLButtonElement {
+      return fixture.nativeElement.querySelectorAll('button.sign')[i];
+    }
+
+    it('le bouton ± inverse le signe de la ligne, et seulement elle', () => {
+      component.scores.at(0).get('scoreValue')!.setValue(7);
+      component.scores.at(1).get('scoreValue')!.setValue(4);
+
+      signButton(0).click();
+
+      expect(component.scores.at(0).get('scoreValue')!.value).toBe(-7);
+      expect(component.scores.at(1).get('scoreValue')!.value).toBe(4);
+
+      signButton(0).click();
+      expect(component.scores.at(0).get('scoreValue')!.value).toBe(7);
+    });
+
+    it('ne produit jamais « -0 » sur un champ vide ou nul', () => {
+      component.scores.at(0).get('scoreValue')!.setValue('' as unknown as number);
+
+      component.toggleSign(0);
+
+      expect(Object.is(component.scores.at(0).get('scoreValue')!.value, 0)).toBeTrue();
+    });
+
+    it('le bouton ± ne soumet pas le formulaire', () => {
+      // Un <button> dans un <form> est de type « submit » par défaut : sans
+      // type="button", changer le signe enregistrerait la manche.
+      expect(signButton(0).getAttribute('type')).toBe('button');
+
+      signButton(0).click();
+
+      expect(closeSpy).not.toHaveBeenCalled();
+    });
+
+    it('enregistre un malus tel quel', () => {
+      component.scores.at(0).get('scoreValue')!.setValue('-12' as unknown as number);
+
+      component.onSave();
+
+      expect(closeSpy).toHaveBeenCalledWith(jasmine.objectContaining({
+        scores: [
+          { participantId: 11, scoreValue: -12 },
+          { participantId: 22, scoreValue: 0 }
+        ]
+      }));
+    });
+
+    it('laisse le pavé numérique libre de proposer « − » quand il le peut', () => {
+      // inputmode="numeric" impose un pavé de chiffres seuls, sans signe moins,
+      // y compris sur Android.
+      const input = fixture.nativeElement.querySelector('input[formcontrolname="scoreValue"]');
+      expect(input.getAttribute('inputmode')).toBeNull();
+    });
+  });
 });

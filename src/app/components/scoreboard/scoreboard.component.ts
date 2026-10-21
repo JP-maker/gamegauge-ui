@@ -104,18 +104,24 @@ export class ScoreboardComponent implements OnChanges {
   }
 
   /**
-   * Points restants avant d'atteindre la cible — ou avant de la dépasser,
-   * selon la condition de victoire. Retourne null s'il n'y a pas de cible.
+   * Points restants avant d'atteindre la cible. Le calcul est le même quelle
+   * que soit la condition de victoire — seul le libellé change : « du but »
+   * quand atteindre la cible fait gagner, « avant défaite » quand elle fait
+   * perdre. Retourne null s'il n'y a pas de cible.
    */
   pointsToGoal(participant: Participant): number | null {
     if (!this.board?.targetScore) {
       return null;
     }
-    const total = this.getParticipantTotalScore(participant);
+    return this.board.targetScore - this.getParticipantTotalScore(participant);
+  }
 
-    return this.board.scoreCondition === 'LOWEST_WINS'
-      ? total - this.board.targetScore
-      : this.board.targetScore - total;
+  /**
+   * Vrai quand le total ne tient plus dans le jeton à la taille normale :
+   * au-delà de trois caractères, signe moins compris (« −128 », « 1250 »).
+   */
+  isLongScore(participant: Participant): boolean {
+    return String(this.getParticipantTotalScore(participant)).length > 3;
   }
 
   /**

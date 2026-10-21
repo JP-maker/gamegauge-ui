@@ -95,7 +95,8 @@
               (click)="addScore.emit(participant)"
               [attr.aria-label]="'Ajouter un score pour ' + participant.name
                                  + ', total ' + getParticipantTotalScore(participant) + ' points'">
-        <span class="token__value">{{ getParticipantTotalScore(participant) }}</span>
+        <span class="token__value"
+              [class.token__value--long]="isLongScore(participant)">{{ getParticipantTotalScore(participant) }}</span>
         <span class="token__unit">pts</span>
       </button>
     </div>
