@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Une seule page à indexer pour l'instant : l'accueil, qui porte tout le
+     contenu public. Ajoutez-y une URL par page de jeu le jour où elles
+     existeront. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://gamegauge.fr/</loc>
+  </url>
+</urlset>

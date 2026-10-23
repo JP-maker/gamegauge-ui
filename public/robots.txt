@@ -1,6 +1,13 @@
 User-agent: *
 Allow: /
 
-# Bloquer l'accès aux pages inutiles pour Google
+# Pages sans intérêt dans un moteur de recherche : l'API, l'espace personnel
+# (les parties de chacun) et le parcours de compte.
 Disallow: /api/
-Disallow: /admin/
+Disallow: /boards
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password
+
+Sitemap: https://gamegauge.fr/sitemap.xml
